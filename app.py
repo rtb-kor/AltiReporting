@@ -234,6 +234,19 @@ st.markdown("""
         .stSelectbox > div > div {
             font-size: 0.85rem !important;
         }
+        
+        /* 다운로드 버튼 컴팩트 */
+        .stButton > button {
+            height: 2.2rem !important;
+            font-size: 0.8rem !important;
+            padding: 0.3rem 0.8rem !important;
+        }
+        
+        .stDownloadButton > button {
+            height: 2rem !important;
+            font-size: 0.75rem !important;
+            padding: 0.25rem 0.6rem !important;
+        }
     }
     
     /* 버튼 스타일 */
@@ -713,25 +726,29 @@ def show_monthly_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("PDF 다운로드"):
+        if st.button("📄 PDF", key="monthly_pdf", use_container_width=True):
             pdf_file = st.session_state.export_manager.generate_pdf_report(report, f"RTB_{year}년_{month}월_월말보고서")
             with open(pdf_file, "rb") as file:
                 st.download_button(
-                    label="PDF 파일 다운로드",
+                    label="다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_{month}월_월말보고서.pdf",
-                    mime="application/pdf"
+                    mime="application/pdf",
+                    key="monthly_pdf_download",
+                    use_container_width=True
                 )
     
     with col2:
-        if st.button("Excel 다운로드"):
+        if st.button("📊 Excel", key="monthly_excel", use_container_width=True):
             excel_file = st.session_state.export_manager.generate_excel_report(data, f"RTB_{year}년_{month}월_월말보고서")
             with open(excel_file, "rb") as file:
                 st.download_button(
-                    label="Excel 파일 다운로드",
+                    label="다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_{month}월_월말보고서.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    key="monthly_excel_download",
+                    use_container_width=True
                 )
 
 def show_semi_annual_report():
@@ -901,7 +918,7 @@ def show_semi_annual_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("PDF 다운로드", key="semi_pdf"):
+        if st.button("📄 PDF", key="semi_pdf", use_container_width=True):
             report_data = {
                 'period': f"{year}년 {period_name}",
                 'summary': semi_annual_summary,
@@ -910,11 +927,25 @@ def show_semi_annual_report():
             pdf_file = st.session_state.export_manager.generate_pdf_report(report_data, f"RTB_{year}년_{period_name}_보고서")
             with open(pdf_file, "rb") as file:
                 st.download_button(
-                    label="PDF 파일 다운로드",
+                    label="다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_{period_name}_보고서.pdf",
                     mime="application/pdf",
-                    key="semi_pdf_download"
+                    key="semi_pdf_download",
+                    use_container_width=True
+                )
+    
+    with col2:
+        if st.button("📊 Excel", key="semi_excel", use_container_width=True):
+            excel_file = st.session_state.export_manager.generate_excel_report(semi_annual_summary, f"RTB_{year}년_{period_name}_보고서")
+            with open(excel_file, "rb") as file:
+                st.download_button(
+                    label="다운로드",
+                    data=file.read(),
+                    file_name=f"RTB_{year}년_{period_name}_보고서.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    key="semi_excel_download",
+                    use_container_width=True
                 )
 
 def show_annual_report():
@@ -1108,7 +1139,7 @@ def show_annual_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("PDF 다운로드", key="annual_pdf"):
+        if st.button("📄 PDF", key="annual_pdf", use_container_width=True):
             report_data = {
                 'period': f"{year}년",
                 'summary': annual_summary,
@@ -1120,23 +1151,25 @@ def show_annual_report():
             pdf_file = st.session_state.export_manager.generate_pdf_report(report_data, f"RTB_{year}년_연말보고서")
             with open(pdf_file, "rb") as file:
                 st.download_button(
-                    label="PDF 파일 다운로드",
+                    label="다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_연말보고서.pdf",
                     mime="application/pdf",
-                    key="annual_pdf_download"
+                    key="annual_pdf_download",
+                    use_container_width=True
                 )
     
     with col2:
-        if st.button("Excel 다운로드", key="annual_excel"):
+        if st.button("📊 Excel", key="annual_excel", use_container_width=True):
             excel_file = st.session_state.export_manager.generate_excel_report(annual_summary, f"RTB_{year}년_연말보고서")
             with open(excel_file, "rb") as file:
                 st.download_button(
-                    label="Excel 파일 다운로드",
+                    label="다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_연말보고서.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    key="annual_excel_download"
+                    key="annual_excel_download",
+                    use_container_width=True
                 )
 
 def show_settings():
