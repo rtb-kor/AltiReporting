@@ -523,7 +523,7 @@ def show_monthly_report():
         # 매출 총계
         total_revenue = sum(data['매출'].values())
         st.markdown(f'''
-        <div style="background: white; border: 2px solid #e9ecef; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+        <div style="background: white; border: 3px solid #6c757d; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
             <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
                 매출 총계: <span style="color: red;">{total_revenue:,}원</span>
             </h3>
@@ -553,7 +553,7 @@ def show_monthly_report():
         # 매입 총계
         total_expense = sum(data['매입'].values())
         st.markdown(f'''
-        <div style="background: white; border: 2px solid #e9ecef; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+        <div style="background: white; border: 3px solid #6c757d; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
             <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
                 매입 총계: <span style="color: blue;">{total_expense:,}원</span>
             </h3>
@@ -566,7 +566,7 @@ def show_monthly_report():
     profit_color = "red" if net_profit >= 0 else "blue"
     
     st.markdown(f'''
-    <div style="background: white; border: 2px solid #e9ecef; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+    <div style="background: white; border: 3px solid #6c757d; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
         <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
             순이익: <span style="color: {profit_color};">{net_profit:,}원</span>
         </h3>
