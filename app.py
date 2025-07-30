@@ -208,6 +208,23 @@ def show_data_input():
         total_revenue = sum(revenue_data.values())
         st.success(f"**총 매출: {total_revenue:,}원**")
         
+        # 매출 관련 파일 첨부
+        st.markdown("---")
+        st.markdown("#### 📎 매출 관련 파일 첨부")
+        
+        revenue_files = st.file_uploader(
+            "매출 관련 증빙서류를 첨부하세요",
+            type=['pdf', 'xlsx', 'xls', 'png', 'jpg', 'jpeg'],
+            accept_multiple_files=True,
+            key="revenue_files",
+            help="세금계산서, 입금확인서, 계약서 등"
+        )
+        
+        if revenue_files:
+            st.success(f"매출 관련 파일 {len(revenue_files)}개가 첨부되었습니다.")
+            for file in revenue_files:
+                st.text(f"📄 {file.name} ({file.size:,} bytes)")
+        
         # 새로운 매출처 추가 기능
         with st.expander("➕ 새로운 매출처 추가"):
             new_source = st.text_input("새 매출처명")
@@ -254,6 +271,23 @@ def show_data_input():
             label = f"{item} (원) - {description}" if description else f"{item} (원)"
             value = st.number_input(label, value=current_value, min_value=0, step=100000, key=f"expense_{item}")
             expense_data[item] = value
+        
+        # 매입 관련 파일 첨부
+        st.markdown("---")
+        st.markdown("#### 📎 매입 관련 파일 첨부")
+        
+        expense_files = st.file_uploader(
+            "매입 관련 증빙서류를 첨부하세요",
+            type=['pdf', 'xlsx', 'xls', 'png', 'jpg', 'jpeg'],
+            accept_multiple_files=True,
+            key="expense_files",
+            help="세금계산서, 영수증, 카드명세서, 급여명세서 등"
+        )
+        
+        if expense_files:
+            st.success(f"매입 관련 파일 {len(expense_files)}개가 첨부되었습니다.")
+            for file in expense_files:
+                st.text(f"📄 {file.name} ({file.size:,} bytes)")
     
     st.markdown("---")
     
