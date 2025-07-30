@@ -221,76 +221,8 @@ def show_data_input():
     if 'expense_items' not in st.session_state:
         st.session_state.expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
     
-    # 관리 버튼들
-    with st.expander("⚙️ 매출처/매입처 관리"):
-        tab1, tab2, tab3 = st.tabs(["전자세금계산서매출", "영세매출", "매입항목"])
-        
-        with tab1:
-            # 전자세금계산서매출처 관리
-            col_input, col_add = st.columns([3, 1])
-            with col_input:
-                new_electronic = st.text_input("새 전자세금계산서매출처 (영어/한글 모두 가능)", key="new_electronic", placeholder="예: ABC Company Ltd.")
-            with col_add:
-                if st.button("추가", key="add_electronic"):
-                    if new_electronic and new_electronic.strip() and new_electronic not in st.session_state.revenue_sources['electronic_tax']:
-                        # 입력값 정리 (앞뒤 공백 제거)
-                        clean_name = new_electronic.strip()
-                        st.session_state.revenue_sources['electronic_tax'].append(clean_name)
-                        st.success(f"'{clean_name}' 추가됨")
-                        st.rerun()
-            
-            for i, source in enumerate(st.session_state.revenue_sources['electronic_tax'][:]):
-                col_name, col_del = st.columns([3, 1])
-                with col_name:
-                    st.text(source)
-                with col_del:
-                    if st.button("🗑️", key=f"del_electronic_{i}"):
-                        st.session_state.revenue_sources['electronic_tax'].remove(source)
-                        st.rerun()
-        
-        with tab2:
-            # 영세매출처 관리
-            col_input, col_add = st.columns([3, 1])
-            with col_input:
-                new_zero = st.text_input("새 영세매출처 (영어/한글 모두 가능)", key="new_zero", placeholder="예: Global Trade Co.")
-            with col_add:
-                if st.button("추가", key="add_zero"):
-                    if new_zero and new_zero.strip() and new_zero not in st.session_state.revenue_sources['zero_rated']:
-                        clean_name = new_zero.strip()
-                        st.session_state.revenue_sources['zero_rated'].append(clean_name)
-                        st.success(f"'{clean_name}' 추가됨")
-                        st.rerun()
-            
-            for i, source in enumerate(st.session_state.revenue_sources['zero_rated'][:]):
-                col_name, col_del = st.columns([3, 1])
-                with col_name:
-                    st.text(source)
-                with col_del:
-                    if st.button("🗑️", key=f"del_zero_{i}"):
-                        st.session_state.revenue_sources['zero_rated'].remove(source)
-                        st.rerun()
-        
-        with tab3:
-            # 매입 항목 관리
-            col_input, col_add = st.columns([3, 1])
-            with col_input:
-                new_expense = st.text_input("새 매입 항목 (영어/한글 모두 가능)", key="new_expense", placeholder="예: Office Supplies")
-            with col_add:
-                if st.button("추가", key="add_expense"):
-                    if new_expense and new_expense.strip() and new_expense not in st.session_state.expense_items:
-                        clean_name = new_expense.strip()
-                        st.session_state.expense_items.append(clean_name)
-                        st.success(f"'{clean_name}' 추가됨")
-                        st.rerun()
-            
-            for i, item in enumerate(st.session_state.expense_items[:]):
-                col_name, col_del = st.columns([3, 1])
-                with col_name:
-                    st.text(item)
-                with col_del:
-                    if st.button("🗑️", key=f"del_expense_{i}"):
-                        st.session_state.expense_items.remove(item)
-                        st.rerun()
+    # 안내 메시지
+    st.info("💡 **매출처/매입처 수정**: '설정' 메뉴에서 매출처와 매입처를 추가/삭제할 수 있습니다.")
     
     # 매출/매입 입력
     col1, col2 = st.columns(2)
