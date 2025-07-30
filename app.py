@@ -158,15 +158,40 @@ def show_data_input():
         st.subheader("💸 매입 입력")
         
         # 매입 항목
-        expense_items = [
-            "원자재비", "외주비", "급여", "복리후생비", 
-            "임차료", "공과금", "기타운영비", "세금"
-        ]
+        expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
         expense_data = {}
         
+        # 새로운 매입 항목 추가 기능
+        st.subheader("📝 매입 항목 관리")
+        with st.expander("새 매입 항목 추가"):
+            new_expense = st.text_input("새 매입 항목명 입력")
+            if st.button("매입 항목 추가") and new_expense:
+                if new_expense not in expense_items:
+                    expense_items.insert(-1, new_expense)  # '기타' 앞에 삽입
+                    st.success(f"'{new_expense}' 매입 항목이 추가되었습니다.")
+                    st.rerun()
+                else:
+                    st.warning("이미 존재하는 매입 항목입니다.")
+        
+        # 매입 항목별 금액 입력 및 첨부파일 설명
         for item in expense_items:
             current_value = existing_data.get('매입', {}).get(item, 0)
-            value = st.number_input(f"{item} (원)", value=current_value, min_value=0, step=100000)
+            
+            # 각 항목별 첨부파일 설명 추가
+            descriptions = {
+                "급여": "💼 급여대장 첨부",
+                "수당": "📋 워크파일 첨부", 
+                "법인카드 사용액": "💳 카드사별 월별 정리 가능",
+                "전자세금계산서": "📄 세금계산서 정리파일 첨부",
+                "세금": "🏛️ 4대 보험 납부 자료 등 첨부",
+                "이자": "💰 대출/운영자금 관련 이자 내역",
+                "퇴직금": "👥 퇴직급 지급 내역 또는 충당금 반영",
+                "기타": "📚 교육비, 복리후생 등 기타 항목"
+            }
+            
+            description = descriptions.get(item, "")
+            label = f"{item} (원) - {description}" if description else f"{item} (원)"
+            value = st.number_input(label, value=current_value, min_value=0, step=100000, key=f"expense_{item}")
             expense_data[item] = value
     
     st.markdown("---")

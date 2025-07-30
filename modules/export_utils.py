@@ -266,7 +266,7 @@ class ExportManager:
             revenue_df.to_excel(writer, sheet_name='월별매출비교', index=False)
             
             # 월별 매입 현황
-            expense_items = ["원자재비", "외주비", "급여", "복리후생비", "임차료", "공과금", "기타운영비", "세금"]
+            expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
             
             expense_comparison = {'월': []}
             for item in expense_items:

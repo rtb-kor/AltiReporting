@@ -67,7 +67,7 @@ class DataManager:
             aggregated['매출'][source] = total
         
         # 매입 항목별 집계
-        expense_items = ["원자재비", "외주비", "급여", "복리후생비", "임차료", "공과금", "기타운영비", "세금"]
+        expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
         for item in expense_items:
             total = 0
             for month_data in period_data.values():
@@ -126,7 +126,7 @@ class DataManager:
                 data['매출'][source] = 0
         
         # 매입 항목 검증
-        required_expense_items = ["원자재비", "외주비", "급여", "복리후생비", "임차료", "공과금", "기타운영비", "세금"]
+        required_expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
         for item in required_expense_items:
             if item not in data.get('매입', {}):
                 data['매입'][item] = 0
