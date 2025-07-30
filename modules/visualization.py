@@ -6,10 +6,10 @@ from typing import Dict, Any
 
 class VisualizationManager:
     def __init__(self):
-        # RTB 브랜드 색상 팔레트 (더 생동감 있는 버건디 기반)
+        # RTB 브랜드 색상 팔레트 (로고 색상에 가까운 버건디 기반)
         self.color_palette = [
-            '#A82D4E',  # RTB 생동감 있는 버건디
-            '#C23E60',  # 밝은 생동감 있는 버건디
+            '#B8344F',  # RTB 로고 스타일 버건디
+            '#D32F4A',  # 밝은 로고 스타일 버건디
             '#D14866',  # 부드러운 로즈
             '#6B7280',  # RTB 그레이
             '#374151',  # 진한 그레이
@@ -65,7 +65,7 @@ class VisualizationManager:
                 'text': '매출처별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#A82D4E'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#B8344F'}
             },
             showlegend=True,
             height=400,
@@ -122,7 +122,7 @@ class VisualizationManager:
                 'text': '매입 항목별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#A82D4E'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#B8344F'}
             },
             showlegend=True,
             height=400,
@@ -458,7 +458,7 @@ class VisualizationManager:
         values = list(filtered_data.values())
         
         # 매출 유형별 색상 - 매입분포와 조화로운 3색상
-        colors = ['#A82D4E', '#C23E60', '#D14866']  # RTB 생동감 있는 버건디 계열 3단계
+        colors = ['#B8344F', '#D32F4A', '#D14866']  # RTB 로고 스타일 버건디 계열 3단계
         
         fig = go.Figure(data=[go.Pie(
             labels=labels,
@@ -479,7 +479,7 @@ class VisualizationManager:
                 'text': '매출 구성 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#A82D4E'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#B8344F'}
             },
             showlegend=True,
             height=400,
