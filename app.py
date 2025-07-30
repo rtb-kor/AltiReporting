@@ -148,7 +148,7 @@ def show_data_input():
         st.markdown("#### 📋 전자세금계산서매출")
         electronic_tax_sources = [
             "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", 
-            "Vine Plant", "General Maritime", "Jodiac", "BCKR"
+            "Vine Plant", "종합해사", "Jodiac", "BCKR"
         ]
         
         electronic_tax_total = 0
@@ -329,7 +329,7 @@ def show_monthly_report():
         
         # 전자세금계산서매출
         st.markdown("**📋 전자세금계산서매출**")
-        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "General Maritime", "Jodiac", "BCKR"]
+        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
         electronic_data = []
         electronic_total = 0
         for source in electronic_tax_sources:

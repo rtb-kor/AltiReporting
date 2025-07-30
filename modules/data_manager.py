@@ -59,7 +59,7 @@ class DataManager:
         }
         
         # 매출처별 집계 (전자세금계산서매출 + 영세매출 + 기타)
-        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "General Maritime", "Jodiac", "BCKR"]
+        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
         zero_rated_sources = ["Everllence LEO", "Mitsui"]
         other_sources = ["기타"]
         revenue_sources = electronic_tax_sources + [s for s in zero_rated_sources if s not in electronic_tax_sources] + other_sources
@@ -123,7 +123,7 @@ class DataManager:
                 return False
         
         # 매출처 검증 (전자세금계산서매출 + 영세매출 + 기타)
-        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "General Maritime", "Jodiac", "BCKR"]
+        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
         zero_rated_sources = ["Everllence LEO", "Mitsui"]
         other_sources = ["기타"]
         required_revenue_sources = electronic_tax_sources + [s for s in zero_rated_sources if s not in electronic_tax_sources] + other_sources
