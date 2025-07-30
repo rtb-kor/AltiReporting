@@ -433,12 +433,19 @@ def show_monthly_report():
     st.markdown("---")
     
     # 보고서 헤더
+    # 보고일 계산 (다음 달 15일)
+    if month == 12:
+        report_year = year + 1
+        report_month = 1
+    else:
+        report_year = year
+        report_month = month + 1
+    
     st.markdown(f"""
     <div class="report-header">
         <h2 style="color: white !important; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">RTB {year}년 {month}월 월말보고서</h2>
         <div style="margin-top: 1rem; font-size: 1rem; color: white !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
-            <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
-            <strong>보고기간:</strong> {year}년 {month}월 &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong>보고일:</strong> {report_year}년 {report_month:02d}월 15일 &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>작성자:</strong> RTB 회계팀
         </div>
     </div>
