@@ -40,8 +40,6 @@ st.markdown("""
         font-family: 'Inter', sans-serif !important;
         font-weight: 600 !important;
         font-size: 1.8rem !important;
-        border-bottom: 2px solid var(--rtb-burgundy);
-        padding-bottom: 0.5rem;
     }
     
     /* 서브헤더 스타일 */
