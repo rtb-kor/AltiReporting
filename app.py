@@ -476,7 +476,7 @@ def show_monthly_report():
             <div style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
                 {electronic_content}
             </div>
-            <div style="text-align: right; font-size: 1.3rem; font-weight: 700; padding: 0.5rem; background: #fff; border-radius: 6px; border: 2px solid #6c757d;">
+            <div style="text-align: right; font-size: 1.3rem; font-weight: 700; padding: 0.5rem; background: #fff; border-radius: 6px; border: 1px solid #e9ecef;">
                 <span>소계: {electronic_total:,}원</span>
             </div>
         </div>
@@ -501,7 +501,7 @@ def show_monthly_report():
             <div style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
                 {zero_content}
             </div>
-            <div style="text-align: right; font-size: 1.3rem; font-weight: 700; padding: 0.5rem; background: #fff; border-radius: 6px; border: 2px solid #6c757d;">
+            <div style="text-align: right; font-size: 1.3rem; font-weight: 700; padding: 0.5rem; background: #fff; border-radius: 6px; border: 1px solid #e9ecef;">
                 <span>소계: {zero_total:,}원</span>
             </div>
         </div>
