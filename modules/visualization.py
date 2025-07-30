@@ -55,7 +55,6 @@ class VisualizationManager:
             marker_colors=self.color_palette[:len(labels)],
             texttemplate='%{label}<br>(%{percent})',
             textposition="auto",
-            textfont=dict(size=8),
             hovertemplate='<b>%{label}</b><br>' +
                          '비율: %{percent}<br>' +
                          '<extra></extra>'
@@ -66,22 +65,14 @@ class VisualizationManager:
                 'text': '매출처별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 14, 'family': 'Inter, sans-serif', 'color': '#B8344F'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#B8344F'}
             },
             showlegend=True,
-            height=280,
-            margin=dict(t=40, b=20, l=20, r=20),
-            font=dict(family="Inter, sans-serif", size=10, color='#374151'),
+            height=400,
+            margin=dict(t=50, b=50, l=50, r=50),
+            font=dict(family="Inter, sans-serif", size=12, color='#374151'),
             plot_bgcolor='white',
-            paper_bgcolor='white',
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=-0.1,
-                xanchor="center",
-                x=0.5,
-                font=dict(size=9)
-            )
+            paper_bgcolor='white'
         )
         
         return fig
@@ -121,7 +112,6 @@ class VisualizationManager:
             marker_colors=self.color_palette[:len(labels)],
             texttemplate='%{label}<br>(%{percent})',
             textposition="auto",
-            textfont=dict(size=8),
             hovertemplate='<b>%{label}</b><br>' +
                          '비율: %{percent}<br>' +
                          '<extra></extra>'
@@ -132,22 +122,14 @@ class VisualizationManager:
                 'text': '매입 항목별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 14, 'family': 'Inter, sans-serif', 'color': '#B8344F'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#B8344F'}
             },
             showlegend=True,
-            height=280,
-            margin=dict(t=40, b=20, l=20, r=20),
-            font=dict(family="Inter, sans-serif", size=10, color='#374151'),
+            height=400,
+            margin=dict(t=50, b=50, l=50, r=50),
+            font=dict(family="Inter, sans-serif", size=12, color='#374151'),
             plot_bgcolor='white',
-            paper_bgcolor='white',
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=-0.1,
-                xanchor="center",
-                x=0.5,
-                font=dict(size=9)
-            )
+            paper_bgcolor='white'
         )
         
         return fig

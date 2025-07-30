@@ -194,22 +194,7 @@ st.markdown("""
         
         /* 차트 컨테이너 높이 조정 */
         .js-plotly-plot {
-            height: 220px !important;
-        }
-        
-        /* 특별히 비교 차트 최적화 */
-        [data-testid="stPlotlyChart"] .js-plotly-plot {
-            height: 200px !important;
-        }
-        
-        /* 차트 컨테이너 마진 축소 */
-        .stPlotlyChart {
-            margin-bottom: 0.5rem !important;
-        }
-        
-        /* 서브헤더 마진 축소 */
-        .element-container h3 {
-            margin-bottom: 0.5rem !important;
+            height: 300px !important;
         }
         
         /* 선택박스 폰트 크기 */
@@ -719,16 +704,15 @@ def show_monthly_report():
     ''', unsafe_allow_html=True)
     
     # 시각화
-    st.markdown("---")
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("##### 매출처별 분포")
+        st.subheader("매출처별 분포")
         pie_chart = st.session_state.viz_manager.create_revenue_pie_chart(data['매출'])
         st.plotly_chart(pie_chart, use_container_width=True)
     
     with col2:
-        st.markdown("##### 매입 항목별 분포")
+        st.subheader("매입 항목별 분포")
         expense_pie = st.session_state.viz_manager.create_expense_pie_chart(data['매입'])
         st.plotly_chart(expense_pie, use_container_width=True)
     
