@@ -568,3 +568,50 @@ class VisualizationManager:
         )
         
         return fig
+    
+    def create_revenue_expense_comparison_chart(self, total_revenue: int, total_expense: int, net_profit: int) -> go.Figure:
+        """매출 vs 매입 총액 비교 차트 생성"""
+        categories = ['매출', '매입', '순이익']
+        values = [total_revenue, total_expense, net_profit]
+        colors = ['#4ECDC4', '#FF6B6B', '#45B7D1' if net_profit >= 0 else '#FF4444']
+        
+        fig = go.Figure()
+        
+        # 막대그래프
+        fig.add_trace(go.Bar(
+            x=categories,
+            y=values,
+            marker_color=colors,
+            text=[f'{v:,}원' for v in values],
+            textposition='auto',
+            textfont_size=14,
+            hovertemplate='<b>%{x}</b><br>' +
+                         '금액: %{y:,}원<br>' +
+                         '<extra></extra>'
+        ))
+        
+        # 0원 기준선 추가
+        fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
+        
+        fig.update_layout(
+            title={
+                'text': '연간 재무 성과 비교',
+                'x': 0.5,
+                'xanchor': 'center',
+                'font': {'size': 18}
+            },
+            xaxis_title="구분",
+            yaxis_title="금액 (원)",
+            showlegend=False,
+            height=400,
+            margin=dict(t=60, b=50, l=50, r=50),
+            font=dict(family="Arial", size=12),
+            yaxis=dict(
+                tickformat=',',
+                showgrid=True,
+                gridcolor='lightgray'
+            ),
+            plot_bgcolor='white'
+        )
+        
+        return fig

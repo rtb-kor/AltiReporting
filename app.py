@@ -640,40 +640,62 @@ def show_annual_report():
     
     st.markdown("---")
     
-    # 매출 세부 내역 (심플하게)
-    st.subheader("📊 매출 세부 내역")
+    # 매출/매입 비교 분석
+    st.subheader("📊 매출 vs 매입 비교")
     
-    # 전자세금계산서매출 소계
-    electronic_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
-    electronic_total = sum(annual_summary['매출'].get(source, 0) for source in electronic_sources)
-    
-    # 영세매출 소계
-    zero_sources = ["Everllence LEO", "Mitsui"]
-    zero_total = sum(annual_summary['매출'].get(source, 0) for source in zero_sources)
-    
-    # 기타매출
-    other_total = annual_summary['매출'].get("기타", 0)
-    
-    revenue_summary = {
-        "전자세금계산서매출": electronic_total,
-        "영세매출": zero_total,
-        "기타매출": other_total
-    }
-    
-    col1, col2 = st.columns([1, 1])
+    col1, col2 = st.columns(2)
     
     with col1:
-        # 간단한 매출 구성 표
+        st.markdown("#### 💰 매출 세부 내역")
+        
+        # 전자세금계산서매출 소계
+        electronic_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
+        electronic_total = sum(annual_summary['매출'].get(source, 0) for source in electronic_sources)
+        
+        # 영세매출 소계
+        zero_sources = ["Everllence LEO", "Mitsui"]
+        zero_total = sum(annual_summary['매출'].get(source, 0) for source in zero_sources)
+        
+        # 기타매출
+        other_total = annual_summary['매출'].get("기타", 0)
+        
+        revenue_summary = {
+            "전자세금계산서매출": electronic_total,
+            "영세매출": zero_total,
+            "기타매출": other_total
+        }
+        
+        # 매출 구성 표
         revenue_df = pd.DataFrame(list(revenue_summary.items()))
         revenue_df.columns = ['구분', '금액']
         revenue_df['금액'] = revenue_df['금액'].apply(lambda x: f"{x:,}원")
         revenue_df['비율'] = [f"{(v/total_revenue*100):.1f}%" for v in revenue_summary.values()]
         st.dataframe(revenue_df, hide_index=True, use_container_width=True)
-    
-    with col2:
-        # 간단한 파이차트
+        
+        # 매출 파이차트
         revenue_pie = st.session_state.viz_manager.create_revenue_summary_pie_chart(revenue_summary)
         st.plotly_chart(revenue_pie, use_container_width=True)
+    
+    with col2:
+        st.markdown("#### 💸 매입 세부 내역")
+        
+        # 매입 구성 표
+        expense_df = pd.DataFrame(list(annual_summary['매입'].items()))
+        expense_df.columns = ['항목', '금액']
+        expense_df['금액'] = expense_df['금액'].apply(lambda x: f"{x:,}원")
+        expense_df['비율'] = [f"{(v/total_expense*100):.1f}%" for v in annual_summary['매입'].values()]
+        st.dataframe(expense_df, hide_index=True, use_container_width=True)
+        
+        # 매입 파이차트
+        expense_pie = st.session_state.viz_manager.create_expense_pie_chart(annual_summary['매입'])
+        st.plotly_chart(expense_pie, use_container_width=True)
+    
+    st.markdown("---")
+    
+    # 매출 vs 매입 비교 차트
+    st.subheader("📈 매출 vs 매입 총액 비교")
+    comparison_chart = st.session_state.viz_manager.create_revenue_expense_comparison_chart(total_revenue, total_expense, net_profit)
+    st.plotly_chart(comparison_chart, use_container_width=True)
     
     # 내보내기 버튼
     st.markdown("---")
