@@ -237,8 +237,11 @@ class VisualizationManager:
             )
             return fig
         
-        # 매출처별 월별 데이터 준비
-        revenue_sources = ["Everllence LEO", "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
+        # 매출처별 월별 데이터 준비 (전자세금계산서매출 + 영세매출 + 기타)
+        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR"]
+        zero_rated_sources = ["Everllence LEO", "Mitsui"]
+        other_sources = ["기타"]
+        revenue_sources = electronic_tax_sources + [s for s in zero_rated_sources if s not in electronic_tax_sources] + other_sources
         months = sorted(period_data.keys())
         month_labels = [f"{month.split('-')[1]}월" for month in months]
         

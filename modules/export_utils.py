@@ -179,24 +179,70 @@ class ExportManager:
         if 'data' in report_data:
             data = report_data['data']
             
-            # 매출 데이터
+            # 매출 데이터 (분류별로 표시)
             if '매출' in data:
                 story.append(Paragraph("■ 매출 현황", heading_style))
                 
-                revenue_data = [['매출처', '금액']]
-                for source, amount in data['매출'].items():
-                    revenue_data.append([source, f"{amount:,}원"])
+                # 전자세금계산서매출
+                story.append(Paragraph("○ 전자세금계산서매출", normal_style))
+                electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR"]
+                electronic_data = [['매출처', '금액']]
+                electronic_total = 0
+                for source in electronic_tax_sources:
+                    amount = data['매출'].get(source, 0)
+                    electronic_data.append([source, f"{amount:,}원"])
+                    electronic_total += amount
+                electronic_data.append(['소계', f"{electronic_total:,}원"])
                 
-                revenue_table = Table(revenue_data, colWidths=[2.5*inch, 2.5*inch])
-                revenue_table.setStyle(TableStyle([
+                electronic_table = Table(electronic_data, colWidths=[2.5*inch, 2.5*inch])
+                electronic_table.setStyle(TableStyle([
                     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                     ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
-                    ('FONTSIZE', (0, 0), (-1, -1), 10),
+                    ('FONTSIZE', (0, 0), (-1, -1), 9),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+                    ('BACKGROUND', (0, -1), (-1, -1), colors.lightblue)
+                ]))
+                story.append(electronic_table)
+                story.append(Spacer(1, 10))
+                
+                # 영세매출
+                story.append(Paragraph("○ 영세매출", normal_style))
+                zero_rated_sources = ["Everllence LEO", "Mitsui"]
+                zero_data = [['매출처', '금액']]
+                zero_total = 0
+                for source in zero_rated_sources:
+                    amount = data['매출'].get(source, 0)
+                    zero_data.append([source, f"{amount:,}원"])
+                    zero_total += amount
+                zero_data.append(['소계', f"{zero_total:,}원"])
+                
+                zero_table = Table(zero_data, colWidths=[2.5*inch, 2.5*inch])
+                zero_table.setStyle(TableStyle([
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                    ('FONTSIZE', (0, 0), (-1, -1), 9),
+                    ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+                    ('BACKGROUND', (0, -1), (-1, -1), colors.lightgreen)
+                ]))
+                story.append(zero_table)
+                story.append(Spacer(1, 10))
+                
+                # 기타 매출
+                story.append(Paragraph("○ 기타 매출", normal_style))
+                other_amount = data['매출'].get("기타", 0)
+                other_data = [['매출처', '금액'], ['기타', f"{other_amount:,}원"]]
+                
+                other_table = Table(other_data, colWidths=[2.5*inch, 2.5*inch])
+                other_table.setStyle(TableStyle([
+                    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                    ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+                    ('FONTSIZE', (0, 0), (-1, -1), 9),
                     ('GRID', (0, 0), (-1, -1), 1, colors.black),
                     ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey)
                 ]))
-                
-                story.append(revenue_table)
+                story.append(other_table)
                 story.append(Spacer(1, 15))
             
             # 매입 데이터
@@ -272,7 +318,11 @@ class ExportManager:
             
             # 월별 매출 현황
             months = sorted(period_data.keys())
-            revenue_sources = ["Everllence LEO", "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
+            # 매출처 구성 (전자세금계산서매출 + 영세매출 + 기타)
+            electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR"]
+            zero_rated_sources = ["Everllence LEO", "Mitsui"]
+            other_sources = ["기타"]
+            revenue_sources = electronic_tax_sources + [s for s in zero_rated_sources if s not in electronic_tax_sources] + other_sources
             
             revenue_comparison = {'월': []}
             for source in revenue_sources:

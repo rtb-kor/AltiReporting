@@ -141,30 +141,79 @@ def show_data_input():
     with col1:
         st.subheader("💰 매출 입력")
         
-        # 매출처별 입력
-        revenue_sources = ["Everllence LEO", "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
+        # 매출 데이터 초기화
         revenue_data = {}
         
-        # 새로운 매출처 추가 기능
-        st.subheader("📝 매출처 관리")
-        with st.expander("새 매출처 추가"):
-            new_source = st.text_input("새 매출처명 입력")
-            if st.button("매출처 추가") and new_source:
-                if new_source not in revenue_sources:
-                    revenue_sources.insert(-1, new_source)  # '기타' 앞에 삽입
-                    st.success(f"'{new_source}' 매출처가 추가되었습니다.")
-                    st.rerun()
-                else:
-                    st.warning("이미 존재하는 매출처입니다.")
+        # 전자세금계산서매출
+        st.markdown("#### 📋 전자세금계산서매출")
+        electronic_tax_sources = [
+            "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", 
+            "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR"
+        ]
         
-        # 매출처별 금액 입력
-        for source in revenue_sources:
+        electronic_tax_total = 0
+        for source in electronic_tax_sources:
             current_value = existing_data.get('매출', {}).get(source, 0)
-            if "USD" in source or source in ["USNS", "RENK", "Vine Plant", "Mitsui", "Jodiac", "BCKR"]:
-                value = st.number_input(f"{source} (원화환산)", value=current_value, min_value=0, step=1000000)
-            else:
-                value = st.number_input(f"{source} (원)", value=current_value, min_value=0, step=1000000)
+            value = st.number_input(
+                f"{source} (원)", 
+                value=current_value,
+                min_value=0, 
+                step=1000000,
+                key=f"electronic_{source}"
+            )
             revenue_data[source] = value
+            electronic_tax_total += value
+        
+        st.info(f"전자세금계산서매출 소계: {electronic_tax_total:,}원")
+        
+        st.markdown("---")
+        
+        # 영세매출
+        st.markdown("#### 🌐 영세매출")
+        zero_rated_sources = ["Everllence LEO", "Mitsui"]
+        
+        zero_rated_total = 0
+        for source in zero_rated_sources:
+            current_value = existing_data.get('매출', {}).get(source, 0)
+            value = st.number_input(
+                f"{source} (원)", 
+                value=current_value,
+                min_value=0, 
+                step=1000000,
+                key=f"zero_rated_{source}"
+            )
+            # Mitsui는 전자세금계산서매출과 영세매출 둘 다 포함되므로 합산
+            if source == "Mitsui":
+                revenue_data[source] += value
+            else:
+                revenue_data[source] = value
+            zero_rated_total += value
+        
+        st.info(f"영세매출 소계: {zero_rated_total:,}원")
+        
+        # 기타 매출
+        st.markdown("---")
+        st.markdown("#### 📦 기타 매출")
+        current_other = existing_data.get('매출', {}).get("기타", 0)
+        other_revenue = st.number_input(
+            "기타 (원)", 
+            value=current_other,
+            min_value=0, 
+            step=1000000,
+            key="other_revenue"
+        )
+        revenue_data["기타"] = other_revenue
+        
+        # 총 매출 표시
+        total_revenue = sum(revenue_data.values())
+        st.success(f"**총 매출: {total_revenue:,}원**")
+        
+        # 새로운 매출처 추가 기능
+        with st.expander("➕ 새로운 매출처 추가"):
+            new_source = st.text_input("새 매출처명")
+            source_type = st.selectbox("분류", ["전자세금계산서매출", "영세매출", "기타"])
+            if st.button("추가") and new_source:
+                st.info(f"'{new_source}'를 {source_type} 분류에 추가하려면 시스템 관리자에게 문의하세요.")
     
     with col2:
         st.subheader("💸 매입 입력")
@@ -277,12 +326,43 @@ def show_monthly_report():
     
     with col1:
         st.subheader("💰 매출 현황")
-        revenue_df = pd.DataFrame(list(data['매출'].items()), columns=['매출처', '금액(원)'])
-        revenue_df['금액(원)'] = revenue_df['금액(원)'].apply(lambda x: f"{x:,}")
-        st.dataframe(revenue_df, hide_index=True, use_container_width=True)
+        
+        # 전자세금계산서매출
+        st.markdown("**📋 전자세금계산서매출**")
+        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR"]
+        electronic_data = []
+        electronic_total = 0
+        for source in electronic_tax_sources:
+            amount = data['매출'].get(source, 0)
+            electronic_data.append([source, f"{amount:,}"])
+            electronic_total += amount
+        
+        electronic_df = pd.DataFrame(electronic_data, columns=['매출처', '금액(원)'])
+        st.dataframe(electronic_df, hide_index=True, use_container_width=True)
+        st.info(f"전자세금계산서매출 소계: {electronic_total:,}원")
+        
+        # 영세매출
+        st.markdown("**🌐 영세매출**")
+        zero_rated_sources = ["Everllence LEO", "Mitsui"]
+        zero_data = []
+        zero_total = 0
+        for source in zero_rated_sources:
+            amount = data['매출'].get(source, 0)
+            zero_data.append([source, f"{amount:,}"])
+            zero_total += amount
+        
+        zero_df = pd.DataFrame(zero_data, columns=['매출처', '금액(원)'])
+        st.dataframe(zero_df, hide_index=True, use_container_width=True)
+        st.info(f"영세매출 소계: {zero_total:,}원")
+        
+        # 기타 매출
+        st.markdown("**📦 기타 매출**")
+        other_amount = data['매출'].get("기타", 0)
+        other_df = pd.DataFrame([["기타", f"{other_amount:,}"]], columns=['매출처', '금액(원)'])
+        st.dataframe(other_df, hide_index=True, use_container_width=True)
         
         total_revenue = sum(data['매출'].values())
-        st.metric("매출 총계", f"{total_revenue:,}원")
+        st.success(f"**매출 총계: {total_revenue:,}원**")
     
     with col2:
         st.subheader("💸 매입 현황")
