@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from reportlab.lib.pagesizes import A4, letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.lib import colors
@@ -85,13 +85,37 @@ class ExportManager:
         
         story = []
         
-        # 제목
-        if isinstance(report_data, dict) and 'period' in report_data:
-            title = f"RTB {report_data['period']} 보고서"
-        else:
-            title = f"RTB 보고서"
+        # 로고와 제목을 함께 배치
+        header_data = []
         
-        story.append(Paragraph(title, title_style))
+        # 로고 추가 시도
+        try:
+            logo = Image("assets/rtb_logo.png", width=1*inch, height=0.8*inch)
+            if isinstance(report_data, dict) and 'period' in report_data:
+                title = f"RTB {report_data['period']} 보고서"
+            else:
+                title = f"RTB 보고서"
+            title_para = Paragraph(title, title_style)
+            
+            header_table = Table([[logo, title_para]], colWidths=[1.5*inch, 5*inch])
+            header_table.setStyle(TableStyle([
+                ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                ('ALIGN', (1, 0), (1, 0), 'LEFT'),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 0),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+                ('TOPPADDING', (0, 0), (-1, -1), 0),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 0),
+            ]))
+            story.append(header_table)
+        except:
+            # 로고가 없으면 제목만 표시
+            if isinstance(report_data, dict) and 'period' in report_data:
+                title = f"RTB {report_data['period']} 보고서"
+            else:
+                title = f"RTB 보고서"
+            story.append(Paragraph(title, title_style))
+        
         story.append(Spacer(1, 12))
         
         # 기본 정보

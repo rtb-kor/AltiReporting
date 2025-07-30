@@ -27,7 +27,19 @@ if 'export_manager' not in st.session_state:
     st.session_state.export_manager = ExportManager()
 
 def main():
-    st.title("🏢 RTB 회계 통합 보고서 시스템")
+    # 헤더에 로고와 제목 표시
+    col1, col2 = st.columns([1, 4])
+    
+    with col1:
+        try:
+            st.image("assets/rtb_logo.png", width=100)
+        except:
+            st.write("🏢")
+    
+    with col2:
+        st.title("RTB 회계 통합 보고서 시스템")
+        st.caption("Real-Time Business Accounting Management System")
+    
     st.markdown("---")
     
     # 사이드바 메뉴
@@ -244,12 +256,21 @@ def show_monthly_report():
     st.markdown("---")
     
     # 보고서 헤더
-    st.markdown(f"""
-    ## 📋 RTB {year}년 {month}월 월말 보고서
-    **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
-    **보고기간:** {year}년 {month}월 1일 ~ {year}년 {month}월 말일  
-    **작성자:** RTB 회계팀
-    """)
+    header_col1, header_col2 = st.columns([1, 4])
+    
+    with header_col1:
+        try:
+            st.image("assets/rtb_logo.png", width=80)
+        except:
+            st.write("🏢")
+    
+    with header_col2:
+        st.markdown(f"""
+        ## RTB {year}년 {month}월 월말 보고서
+        **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
+        **보고기간:** {year}년 {month}월 1일 ~ {year}년 {month}월 말일  
+        **작성자:** RTB 회계팀
+        """)
     
     # 요약 테이블
     col1, col2 = st.columns(2)
@@ -352,12 +373,21 @@ def show_semi_annual_report():
     st.markdown("---")
     
     # 보고서 헤더
-    st.markdown(f"""
-    ## 📋 RTB {year}년 {period_name} 보고서
-    **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
-    **보고기간:** {year}년 {months[0]}월 ~ {months[-1]}월  
-    **작성자:** RTB 회계팀
-    """)
+    header_col1, header_col2 = st.columns([1, 4])
+    
+    with header_col1:
+        try:
+            st.image("assets/rtb_logo.png", width=80)
+        except:
+            st.write("🏢")
+    
+    with header_col2:
+        st.markdown(f"""
+        ## RTB {year}년 {period_name} 보고서
+        **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
+        **보고기간:** {year}년 {months[0]}월 ~ {months[-1]}월  
+        **작성자:** RTB 회계팀
+        """)
     
     # 월별 추이
     st.subheader("📈 월별 실적 추이")
@@ -445,12 +475,21 @@ def show_annual_report():
     st.markdown("---")
     
     # 보고서 헤더
-    st.markdown(f"""
-    ## 📋 RTB {year}년 연말 종합 보고서
-    **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
-    **보고기간:** {year}년 1월 1일 ~ {year}년 12월 31일  
-    **작성자:** RTB 회계팀장
-    """)
+    header_col1, header_col2 = st.columns([1, 4])
+    
+    with header_col1:
+        try:
+            st.image("assets/rtb_logo.png", width=80)
+        except:
+            st.write("🏢")
+    
+    with header_col2:
+        st.markdown(f"""
+        ## RTB {year}년 연말 종합 보고서
+        **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
+        **보고기간:** {year}년 1월 1일 ~ {year}년 12월 31일  
+        **작성자:** RTB 회계팀장
+        """)
     
     # 연간 요약
     col1, col2, col3, col4 = st.columns(4)
