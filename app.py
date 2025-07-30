@@ -450,7 +450,7 @@ def show_monthly_report():
     st.markdown("---")
     st.markdown(f'''
     <div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white; text-align: center;">
-        <h2 style="color: white !important; margin: 0; font-size: 1.5rem; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">순이익: {net_profit:,}원</h2>
+        <h2 style="color: white !important; margin: 0; font-size: 1.5rem; font-family: 'Inter', sans-serif;">순이익: {net_profit:,}원</h2>
     </div>
     ''', unsafe_allow_html=True)
     
@@ -553,7 +553,7 @@ def show_semi_annual_report():
     with col2:
         st.markdown(f'<div class="metric-card"><h3 style="color: blue !important; margin: 0;">{period_name} 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     with col3:
-        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">{period_name} 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0;">{period_name} 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
     
     # 상세 분석
     col1, col2 = st.columns(2)
@@ -645,7 +645,7 @@ def show_annual_report():
         st.markdown(f'<div class="metric-card"><h3 style="color: blue !important; margin: 0;">연간 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     
     with col3:
-        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">연간 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0;">연간 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
     
     st.markdown("---")
     
