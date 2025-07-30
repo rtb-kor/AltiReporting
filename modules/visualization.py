@@ -607,7 +607,7 @@ class VisualizationManager:
                 marker_line_width=2,
                 text=[f'{value:,}원'],
                 textposition='auto',
-                textfont=dict(size=14, color='white', family='Inter, sans-serif'),
+                textfont=dict(size=10, color='white', family='Inter, sans-serif'),
                 hovertemplate=f'<b>{category}</b><br>' +
                              f'금액: {value:,}원<br>' +
                              '<extra></extra>',
@@ -623,27 +623,27 @@ class VisualizationManager:
                 'text': '매출 vs 매입 총액 비교',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 20, 'family': 'Inter, sans-serif', 'color': '#374151'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#374151'}
             },
             xaxis_title="구분",
             yaxis_title="금액 (원)",
-            height=450,
-            margin=dict(t=70, b=60, l=80, r=50),
-            font=dict(family="Inter, sans-serif", size=12, color='#374151'),
+            height=350,
+            margin=dict(t=50, b=40, l=60, r=30),
+            font=dict(family="Inter, sans-serif", size=10, color='#374151'),
             xaxis=dict(
-                tickfont=dict(size=14, color='#374151'),
-                title_font=dict(size=14, color='#374151')
+                tickfont=dict(size=12, color='#374151'),
+                title_font=dict(size=12, color='#374151')
             ),
             yaxis=dict(
                 tickformat=',',
                 showgrid=True,
                 gridcolor='#E5E7EB',
-                tickfont=dict(size=12, color='#374151'),
-                title_font=dict(size=14, color='#374151')
+                tickfont=dict(size=10, color='#374151'),
+                title_font=dict(size=12, color='#374151')
             ),
             plot_bgcolor='white',
             paper_bgcolor='white',
-            bargap=0.3  # 막대 간격 조정
+            bargap=0.4  # 막대 간격 조정
         )
         
         return fig

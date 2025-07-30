@@ -194,7 +194,12 @@ st.markdown("""
         
         /* 차트 컨테이너 높이 조정 */
         .js-plotly-plot {
-            height: 300px !important;
+            height: 280px !important;
+        }
+        
+        /* 특별히 비교 차트 최적화 */
+        [data-testid="stPlotlyChart"] .js-plotly-plot {
+            height: 250px !important;
         }
         
         /* 선택박스 폰트 크기 */
