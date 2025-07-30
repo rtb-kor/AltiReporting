@@ -30,8 +30,11 @@ st.markdown("""
     
     /* 전체 앱 스타일 */
     .main .block-container {
-        padding-top: 1rem;
+        padding-top: 0.5rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
         font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+        max-width: 100%;
     }
     
     /* 제목 스타일 */
@@ -39,7 +42,14 @@ st.markdown("""
         color: var(--rtb-burgundy) !important;
         font-family: 'Inter', sans-serif !important;
         font-weight: 600 !important;
-        font-size: 1.8rem !important;
+        font-size: 1.4rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+    
+    /* 캡션 스타일 */
+    .css-10trblm {
+        font-size: 0.8rem !important;
+        margin-bottom: 0.5rem !important;
     }
     
     /* 서브헤더 스타일 */
@@ -47,17 +57,18 @@ st.markdown("""
         color: var(--rtb-dark-gray) !important;
         font-family: 'Inter', sans-serif !important;
         font-weight: 500 !important;
-        font-size: 1.3rem !important;
+        font-size: 1.1rem !important;
+        margin-bottom: 0.5rem !important;
     }
     
     /* 보고서 헤더 박스 */
     .report-header {
         background: linear-gradient(135deg, var(--rtb-burgundy), var(--rtb-burgundy-light));
         color: white !important;
-        padding: 2rem;
-        border-radius: 10px;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
     .report-header h2,
@@ -71,10 +82,10 @@ st.markdown("""
     .metric-card {
         background: white;
         border: 1px solid #E5E7EB;
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        margin-bottom: 1rem;
+        border-radius: 6px;
+        padding: 0.8rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        margin-bottom: 0.8rem;
     }
     
     /* burgundy 배경 메트릭 카드에서 흰색 텍스트 우선 적용 */
@@ -140,15 +151,83 @@ st.markdown("""
         border-bottom: none;
     }
     
+    /* 모바일 전용 스타일 */
     @media (max-width: 768px) {
+        .main .block-container {
+            padding: 0.25rem !important;
+        }
+        
         .schedule-item {
             flex-direction: column;
             align-items: flex-start;
             gap: 0.25rem;
+            font-size: 0.85rem;
         }
         
         .schedule-card {
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
+            padding: 0.8rem;
+        }
+        
+        /* 테이블 모바일 최적화 */
+        .dataframe {
+            font-size: 0.8rem !important;
+        }
+        
+        .dataframe th, .dataframe td {
+            padding: 0.4rem !important;
+        }
+        
+        /* 헤더 컴팩트 */
+        .monthly-report-header, .semi-annual-report-header, .annual-report-header {
+            padding: 0.8rem !important;
+            margin-bottom: 0.8rem !important;
+        }
+        
+        .monthly-report-header h2, .semi-annual-report-header h2, .annual-report-header h2 {
+            font-size: 1.1rem !important;
+        }
+        
+        .monthly-report-header div, .semi-annual-report-header div, .annual-report-header div {
+            font-size: 0.75rem !important;
+        }
+        
+        /* 차트 컨테이너 높이 조정 */
+        .js-plotly-plot {
+            height: 300px !important;
+        }
+        
+        /* 선택박스 폰트 크기 */
+        .stSelectbox label {
+            font-size: 0.9rem !important;
+        }
+        
+        /* 입력 폼 컴팩트 */
+        .stNumberInput label {
+            font-size: 0.85rem !important;
+        }
+        
+        /* 모바일용 컬럼 스택 */
+        .row-widget.stHorizontal {
+            flex-direction: column !important;
+        }
+        
+        /* 매출/매입 카드 모바일 최적화 */
+        .metric-card h4 {
+            font-size: 1rem !important;
+        }
+        
+        .metric-card div {
+            font-size: 0.8rem !important;
+        }
+        
+        /* 사이드바 모바일 최적화 */
+        .css-1d391kg {
+            padding: 0.5rem !important;
+        }
+        
+        .stSelectbox > div > div {
+            font-size: 0.85rem !important;
         }
     }
     
@@ -160,6 +239,9 @@ st.markdown("""
         border-radius: 6px !important;
         font-family: 'Inter', sans-serif !important;
         font-weight: 500 !important;
+        font-size: 0.9rem !important;
+        padding: 0.5rem 1rem !important;
+        width: 100% !important;
         transition: all 0.3s ease !important;
     }
     
@@ -262,14 +344,14 @@ def main():
     # 관리자 인증 확인
     is_admin = check_admin_access()
     
-    # 헤더에 로고와 제목 표시
-    col1, col2 = st.columns([1, 4])
+    # 헤더에 로고와 제목 표시 (모바일 최적화)
+    col1, col2 = st.columns([1, 5])
     
     with col1:
         try:
-            st.image("assets/rtb_logo.png", width=100)
+            st.image("assets/rtb_logo.png", width=60)
         except:
-            st.write("🏢")
+            st.markdown("🏢")
     
     with col2:
         st.title("RTB 회계 통합 보고서")
