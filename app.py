@@ -86,6 +86,39 @@ st.markdown("""
         color: white !important;
     }
     
+    /* 모바일 반응형 - 보고일정 세로 배열 */
+    .schedule-card {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        border-left: 4px solid var(--rtb-burgundy);
+    }
+    
+    .schedule-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .schedule-item:last-child {
+        border-bottom: none;
+    }
+    
+    @media (max-width: 768px) {
+        .schedule-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+        }
+        
+        .schedule-card {
+            margin-bottom: 1rem;
+        }
+    }
+    
     /* 버튼 스타일 */
     .stButton > button {
         background-color: var(--rtb-burgundy) !important;
@@ -227,7 +260,24 @@ def main():
         
         st.markdown("---")
         st.subheader("🗓️ 보고 일정")
-        st.info("• 월말 보고: 매월 15일\n• 반기 보고: 7월/1월 15일\n• 연말 보고: 1월 15일")
+        
+        # 모바일 친화적인 보고일정 카드
+        st.markdown('''
+        <div class="schedule-card">
+            <div class="schedule-item">
+                <strong style="color: var(--rtb-burgundy);">월말 보고</strong>
+                <span>매월 15일</span>
+            </div>
+            <div class="schedule-item">
+                <strong style="color: var(--rtb-burgundy);">반기 보고</strong>
+                <span>7월/1월 15일</span>
+            </div>
+            <div class="schedule-item">
+                <strong style="color: var(--rtb-burgundy);">연말 보고</strong>
+                <span>1월 15일</span>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
         
         # 현재 날짜 표시
         today = date.today()
