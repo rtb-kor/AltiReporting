@@ -462,19 +462,19 @@ def show_monthly_report():
         for source in electronic_tax_sources:
             amount = data['매출'].get(source, 0)
             if amount > 0:  # 0원이 아닌 경우만 표시
-                electronic_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid #e9ecef;"><span>{source}</span><span style="color: red; font-weight: 600;">{amount:,}원</span></div>')
+                electronic_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid #e9ecef;"><span>{source}</span><span style="font-weight: 600;">{amount:,}원</span></div>')
                 electronic_total += amount
         
         electronic_content = ''.join(electronic_items) if electronic_items else '<div style="text-align: center; color: #6c757d;">데이터 없음</div>'
         
         st.markdown(f'''
-        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #dc3545; margin-bottom: 1rem;">
+        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #6c757d; margin-bottom: 1rem;">
             <h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-weight: 600;">전자세금계산서매출</h4>
             <div style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
                 {electronic_content}
             </div>
-            <div style="text-align: right; font-size: 1.3rem; font-weight: 700; padding: 0.5rem; background: #fff; border-radius: 6px; border: 2px solid #dc3545;">
-                <span style="color: red !important;">소계: {electronic_total:,}원</span>
+            <div style="text-align: right; font-size: 1.3rem; font-weight: 700; padding: 0.5rem; background: #fff; border-radius: 6px; border: 2px solid #6c757d;">
+                <span>소계: {electronic_total:,}원</span>
             </div>
         </div>
         ''', unsafe_allow_html=True)
@@ -487,29 +487,29 @@ def show_monthly_report():
         for source in zero_rated_sources:
             amount = data['매출'].get(source, 0)
             if amount > 0:  # 0원이 아닌 경우만 표시
-                zero_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid #e9ecef;"><span>{source}</span><span style="color: red; font-weight: 600;">{amount:,}원</span></div>')
+                zero_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid #e9ecef;"><span>{source}</span><span style="font-weight: 600;">{amount:,}원</span></div>')
                 zero_total += amount
         
         zero_content = ''.join(zero_items) if zero_items else '<div style="text-align: center; color: #6c757d;">데이터 없음</div>'
         
         st.markdown(f'''
-        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #dc3545; margin-bottom: 1rem;">
+        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #6c757d; margin-bottom: 1rem;">
             <h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-weight: 600;">영세매출</h4>
             <div style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
                 {zero_content}
             </div>
-            <div style="text-align: right; font-size: 1.3rem; font-weight: 700; padding: 0.5rem; background: #fff; border-radius: 6px; border: 2px solid #dc3545;">
-                <span style="color: red !important;">소계: {zero_total:,}원</span>
+            <div style="text-align: right; font-size: 1.3rem; font-weight: 700; padding: 0.5rem; background: #fff; border-radius: 6px; border: 2px solid #6c757d;">
+                <span>소계: {zero_total:,}원</span>
             </div>
         </div>
         ''', unsafe_allow_html=True)
         
         # 기타매출 카드
         other_amount = data['매출'].get("기타", 0)
-        other_content = f'<div style="display: flex; justify-content: space-between; padding: 0.3rem 0;"><span>기타</span><span style="color: red; font-weight: 600;">{other_amount:,}원</span></div>' if other_amount > 0 else '<div style="text-align: center; color: #6c757d;">데이터 없음</div>'
+        other_content = f'<div style="display: flex; justify-content: space-between; padding: 0.3rem 0;"><span>기타</span><span style="font-weight: 600;">{other_amount:,}원</span></div>' if other_amount > 0 else '<div style="text-align: center; color: #6c757d;">데이터 없음</div>'
         
         st.markdown(f'''
-        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #dc3545; margin-bottom: 1rem;">
+        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #6c757d; margin-bottom: 1rem;">
             <h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-weight: 600;">기타매출</h4>
             <div style="background: white; padding: 1rem; border-radius: 6px;">
                 {other_content}
@@ -520,7 +520,7 @@ def show_monthly_report():
         # 매출 총계
         total_revenue = sum(data['매출'].values())
         st.markdown(f'''
-        <div style="background: linear-gradient(135deg, #dc3545, #e85a6a); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+        <div style="background: linear-gradient(135deg, #6c757d, #868e96); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
             <h3 style="margin: 0; color: white; text-align: center; font-size: 1.4rem; font-weight: 700;">
                 매출 총계: {total_revenue:,}원
             </h3>
