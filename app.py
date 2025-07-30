@@ -185,12 +185,15 @@ def show_data_input():
         # 매출 데이터 초기화
         revenue_data = {}
         
-        # 전자세금계산서매출
+        # 전자세금계산서매출 (설정에서 관리되는 매출처 사용)
         st.markdown("#### 📋 전자세금계산서매출")
-        electronic_tax_sources = [
-            "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", 
-            "Vine Plant", "종합해사", "Jodiac", "BCKR"
-        ]
+        if 'revenue_sources' not in st.session_state:
+            st.session_state.revenue_sources = {
+                'electronic_tax': ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"],
+                'zero_rated': ["Everllence LEO", "Mitsui"],
+                'other': ["기타"]
+            }
+        electronic_tax_sources = st.session_state.revenue_sources['electronic_tax']
         
         electronic_tax_total = 0
         for source in electronic_tax_sources:
@@ -209,9 +212,9 @@ def show_data_input():
         
         st.markdown("---")
         
-        # 영세매출
+        # 영세매출 (설정에서 관리되는 매출처 사용)
         st.markdown("#### 🌐 영세매출")
-        zero_rated_sources = ["Everllence LEO", "Mitsui"]
+        zero_rated_sources = st.session_state.revenue_sources['zero_rated']
         
         zero_rated_total = 0
         for source in zero_rated_sources:
@@ -269,31 +272,22 @@ def show_data_input():
             for file in revenue_files:
                 st.text(f"📄 {file.name} ({file.size:,} bytes)")
         
-        # 새로운 매출처 추가 기능
-        with st.expander("➕ 새로운 매출처 추가"):
-            new_source = st.text_input("새 매출처명")
-            source_type = st.selectbox("분류", ["전자세금계산서매출", "영세매출", "기타"])
-            if st.button("추가") and new_source:
-                st.info(f"'{new_source}'를 {source_type} 분류에 추가하려면 시스템 관리자에게 문의하세요.")
+        # 매출처 관리 안내
+        with st.expander("ℹ️ 매출처 관리"):
+            st.info("매출처를 추가, 수정, 삭제하려면 '⚙️ 설정' 메뉴의 '매출처/매입처 관리' 탭을 이용하세요.")
     
     with col2:
         st.subheader("💸 매입 입력")
         
-        # 매입 항목
-        expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
+        # 매입 항목 (설정에서 관리되는 매입처 사용)
+        if 'expense_items' not in st.session_state:
+            st.session_state.expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
+        expense_items = st.session_state.expense_items
         expense_data = {}
         
-        # 새로운 매입 항목 추가 기능
-        st.subheader("📝 매입 항목 관리")
-        with st.expander("새 매입 항목 추가"):
-            new_expense = st.text_input("새 매입 항목명 입력")
-            if st.button("매입 항목 추가") and new_expense:
-                if new_expense not in expense_items:
-                    expense_items.insert(-1, new_expense)  # '기타' 앞에 삽입
-                    st.success(f"'{new_expense}' 매입 항목이 추가되었습니다.")
-                    st.rerun()
-                else:
-                    st.warning("이미 존재하는 매입 항목입니다.")
+        # 매입 항목 관리 안내
+        with st.expander("ℹ️ 매입 항목 관리"):
+            st.info("매입 항목을 추가, 수정, 삭제하려면 '⚙️ 설정' 메뉴의 '매출처/매입처 관리' 탭을 이용하세요.")
         
         # 매입 항목별 금액 입력 및 첨부파일 설명
         for item in expense_items:
@@ -714,37 +708,159 @@ def show_annual_report():
 def show_settings():
     st.header("⚙️ 시스템 설정")
     
-    st.subheader("📊 데이터 관리")
+    # 탭으로 설정 메뉴 구분
+    tab1, tab2, tab3 = st.tabs(["💼 매출처/매입처 관리", "📊 데이터 관리", "ℹ️ 시스템 정보"])
     
-    # 데이터 백업
-    if st.button("💾 데이터 백업"):
-        backup_file = st.session_state.data_manager.backup_data()
-        st.success(f"✅ 데이터가 백업되었습니다: {backup_file}")
+    with tab1:
+        st.subheader("💼 매출처 및 매입처 관리")
+        
+        # 매출처 관리
+        st.markdown("#### 📈 매출처 관리")
+        
+        # 세션 상태에 매출처 정보가 없으면 기본값 설정
+        if 'revenue_sources' not in st.session_state:
+            st.session_state.revenue_sources = {
+                'electronic_tax': ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"],
+                'zero_rated': ["Everllence LEO", "Mitsui"],
+                'other': ["기타"]
+            }
+        
+        # 전자세금계산서매출
+        st.markdown("**🧾 전자세금계산서매출**")
+        electronic_tax_sources = st.session_state.revenue_sources['electronic_tax']
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            new_electronic_source = st.text_input("새 전자세금계산서매출처 추가", key="new_electronic")
+        with col2:
+            if st.button("추가", key="add_electronic"):
+                if new_electronic_source and new_electronic_source not in electronic_tax_sources:
+                    st.session_state.revenue_sources['electronic_tax'].append(new_electronic_source)
+                    st.success(f"'{new_electronic_source}' 추가됨")
+                    st.rerun()
+        
+        # 기존 전자세금계산서매출처 수정/삭제
+        for i, source in enumerate(electronic_tax_sources):
+            col1, col2, col3 = st.columns([3, 1, 1])
+            with col1:
+                new_name = st.text_input(f"", value=source, key=f"edit_electronic_{i}")
+            with col2:
+                if st.button("수정", key=f"update_electronic_{i}"):
+                    if new_name != source:
+                        st.session_state.revenue_sources['electronic_tax'][i] = new_name
+                        st.success(f"'{source}' → '{new_name}' 변경됨")
+                        st.rerun()
+            with col3:
+                if st.button("삭제", key=f"delete_electronic_{i}"):
+                    st.session_state.revenue_sources['electronic_tax'].remove(source)
+                    st.success(f"'{source}' 삭제됨")
+                    st.rerun()
+        
+        st.markdown("---")
+        
+        # 영세매출
+        st.markdown("**🌐 영세매출**")
+        zero_rated_sources = st.session_state.revenue_sources['zero_rated']
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            new_zero_source = st.text_input("새 영세매출처 추가", key="new_zero")
+        with col2:
+            if st.button("추가", key="add_zero"):
+                if new_zero_source and new_zero_source not in zero_rated_sources:
+                    st.session_state.revenue_sources['zero_rated'].append(new_zero_source)
+                    st.success(f"'{new_zero_source}' 추가됨")
+                    st.rerun()
+        
+        # 기존 영세매출처 수정/삭제
+        for i, source in enumerate(zero_rated_sources):
+            col1, col2, col3 = st.columns([3, 1, 1])
+            with col1:
+                new_name = st.text_input(f"", value=source, key=f"edit_zero_{i}")
+            with col2:
+                if st.button("수정", key=f"update_zero_{i}"):
+                    if new_name != source:
+                        st.session_state.revenue_sources['zero_rated'][i] = new_name
+                        st.success(f"'{source}' → '{new_name}' 변경됨")
+                        st.rerun()
+            with col3:
+                if st.button("삭제", key=f"delete_zero_{i}"):
+                    st.session_state.revenue_sources['zero_rated'].remove(source)
+                    st.success(f"'{source}' 삭제됨")
+                    st.rerun()
+        
+        st.markdown("---")
+        
+        # 매입처 관리
+        st.markdown("#### 📉 매입 항목 관리")
+        
+        # 세션 상태에 매입 항목이 없으면 기본값 설정
+        if 'expense_items' not in st.session_state:
+            st.session_state.expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
+        
+        expense_items = st.session_state.expense_items
+        
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            new_expense_item = st.text_input("새 매입 항목 추가", key="new_expense")
+        with col2:
+            if st.button("추가", key="add_expense"):
+                if new_expense_item and new_expense_item not in expense_items:
+                    st.session_state.expense_items.append(new_expense_item)
+                    st.success(f"'{new_expense_item}' 추가됨")
+                    st.rerun()
+        
+        # 기존 매입 항목 수정/삭제
+        for i, item in enumerate(expense_items):
+            col1, col2, col3 = st.columns([3, 1, 1])
+            with col1:
+                new_name = st.text_input(f"", value=item, key=f"edit_expense_{i}")
+            with col2:
+                if st.button("수정", key=f"update_expense_{i}"):
+                    if new_name != item:
+                        st.session_state.expense_items[i] = new_name
+                        st.success(f"'{item}' → '{new_name}' 변경됨")
+                        st.rerun()
+            with col3:
+                if st.button("삭제", key=f"delete_expense_{i}"):
+                    st.session_state.expense_items.remove(item)
+                    st.success(f"'{item}' 삭제됨")
+                    st.rerun()
+        
+        st.markdown("---")
+        st.warning("⚠️ 매출처나 매입처를 변경하면 기존 데이터와 일치하지 않을 수 있습니다. 변경 전 데이터를 백업하는 것을 권장합니다.")
     
-    # 데이터 복원
-    uploaded_file = st.file_uploader("📥 백업 파일 업로드", type=['json'])
-    if uploaded_file is not None:
-        if st.button("🔄 데이터 복원"):
-            try:
-                backup_data = json.load(uploaded_file)
-                st.session_state.data_manager.restore_data(backup_data)
-                st.success("✅ 데이터가 복원되었습니다.")
-                st.rerun()
-            except Exception as e:
-                st.error(f"❌ 복원 실패: {str(e)}")
+    with tab2:
+        st.subheader("📊 데이터 관리")
+        
+        # 데이터 백업
+        if st.button("💾 데이터 백업"):
+            backup_file = st.session_state.data_manager.backup_data()
+            st.success(f"✅ 데이터가 백업되었습니다: {backup_file}")
+        
+        # 데이터 복원
+        uploaded_file = st.file_uploader("📥 백업 파일 업로드", type=['json'])
+        if uploaded_file is not None:
+            if st.button("🔄 데이터 복원"):
+                try:
+                    backup_data = json.load(uploaded_file)
+                    st.session_state.data_manager.restore_data(backup_data)
+                    st.success("✅ 데이터가 복원되었습니다.")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"❌ 복원 실패: {str(e)}")
     
-    st.markdown("---")
-    
-    # 시스템 정보
-    st.subheader("ℹ️ 시스템 정보")
-    st.info("""
-    **RTB 회계 통합 보고서 시스템 v1.0**
-    
-    • 개발: RTB 회계팀
-    • 기능: 월말/반기/연말 보고서 자동 생성
-    • 지원: 매출처별 분석, PDF/Excel 내보내기
-    • 업데이트: 2025년 7월
-    """)
+    with tab3:
+        # 시스템 정보
+        st.subheader("ℹ️ 시스템 정보")
+        st.info("""
+        **RTB 회계 통합 보고서 시스템 v1.0**
+        
+        • 개발: RTB 회계팀
+        • 기능: 월말/반기/연말 보고서 자동 생성
+        • 지원: 매출처별 분석, PDF/Excel 내보내기
+        • 업데이트: 2025년 7월
+        """)
 
 if __name__ == "__main__":
     main()

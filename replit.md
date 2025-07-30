@@ -7,10 +7,13 @@ RTB 회계 통합 보고서 시스템은 Streamlit 기반의 웹 애플리케이
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
-매출처 설정: 
+Authentication: 관리자 김현지만 데이터 입력 권한 (사용자명: 김현지, 비밀번호: rtb2025)
+매출처 설정 (동적 관리 가능): 
 - 전자세금계산서매출: Everllence Prime, SUNJIN & FMD, USNS, RENK, Vine Plant, 종합해사, Jodiac, BCKR
 - 영세매출: Everllence LEO, Mitsui
-- 기타매출: 기타 (동적 추가 가능)
+- 기타매출: 기타
+매입처 설정 (동적 관리 가능):
+- 급여, 수당, 법인카드 사용액, 전자세금계산서, 세금, 이자, 퇴직금, 기타
 
 ## System Architecture
 
@@ -111,6 +114,8 @@ Preferred communication style: Simple, everyday language.
 - **Data Directory**: `data/` 폴더 자동 생성
 - **Temp Files**: 시스템 임시 디렉토리 사용
 - **Session State**: Streamlit 내장 세션 관리 활용
+- **Authentication**: 관리자 권한 기반 접근 제어
+- **Dynamic Configuration**: 매출처/매입처 실시간 관리 기능
 
 ### Performance Optimization
 - 모듈별 인스턴스를 session state에 캐싱
