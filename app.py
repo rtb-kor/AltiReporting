@@ -26,7 +26,36 @@ if 'viz_manager' not in st.session_state:
 if 'export_manager' not in st.session_state:
     st.session_state.export_manager = ExportManager()
 
+def check_admin_access():
+    """관리자 인증 확인"""
+    if 'is_admin' not in st.session_state:
+        st.session_state.is_admin = False
+    
+    if not st.session_state.is_admin:
+        st.sidebar.markdown("### 🔐 관리자 로그인")
+        username = st.sidebar.text_input("사용자명")
+        password = st.sidebar.text_input("비밀번호", type="password")
+        
+        if st.sidebar.button("로그인"):
+            if username == "김현지" and password == "rtb2025":
+                st.session_state.is_admin = True
+                st.sidebar.success("관리자 로그인 성공!")
+                st.rerun()
+            else:
+                st.sidebar.error("잘못된 로그인 정보입니다.")
+    else:
+        st.sidebar.markdown("### 👤 로그인 정보")
+        st.sidebar.success("관리자: 김현지")
+        if st.sidebar.button("로그아웃"):
+            st.session_state.is_admin = False
+            st.rerun()
+    
+    return st.session_state.is_admin
+
 def main():
+    # 관리자 인증 확인
+    is_admin = check_admin_access()
+    
     # 헤더에 로고와 제목 표시
     col1, col2 = st.columns([1, 4])
     
@@ -42,12 +71,18 @@ def main():
     
     st.markdown("---")
     
-    # 사이드바 메뉴
+    # 사이드바 메뉴 (관리자 권한에 따라 다르게 표시)
     with st.sidebar:
         st.header("📋 메뉴")
+        
+        if is_admin:
+            menu_options = ["📊 대시보드", "📝 데이터 입력", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "⚙️ 설정"]
+        else:
+            menu_options = ["📊 대시보드", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서"]
+        
         menu = st.selectbox(
             "보고서 유형 선택",
-            ["📊 대시보드", "📝 데이터 입력", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "⚙️ 설정"]
+            menu_options
         )
         
         st.markdown("---")
@@ -62,7 +97,10 @@ def main():
     if menu == "📊 대시보드":
         show_dashboard()
     elif menu == "📝 데이터 입력":
-        show_data_input()
+        if is_admin:
+            show_data_input()
+        else:
+            st.error("🔒 관리자만 접근 가능한 메뉴입니다.")
     elif menu == "📈 월말 보고서":
         show_monthly_report()
     elif menu == "📊 반기 보고서":
@@ -70,7 +108,10 @@ def main():
     elif menu == "📋 연말 보고서":
         show_annual_report()
     elif menu == "⚙️ 설정":
-        show_settings()
+        if is_admin:
+            show_settings()
+        else:
+            st.error("🔒 관리자만 접근 가능한 메뉴입니다.")
 
 def show_dashboard():
     st.header("📊 RTB 회계 대시보드")
@@ -184,7 +225,10 @@ def show_data_input():
             )
             # Mitsui는 전자세금계산서매출과 영세매출 둘 다 포함되므로 합산
             if source == "Mitsui":
-                revenue_data[source] += value
+                if source in revenue_data:
+                    revenue_data[source] += value
+                else:
+                    revenue_data[source] = value
             else:
                 revenue_data[source] = value
             zero_rated_total += value
