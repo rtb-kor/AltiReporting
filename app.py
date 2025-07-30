@@ -301,11 +301,7 @@ def main():
         else:
             st.error("🔒 관리자만 접근 가능한 메뉴입니다.")
     
-    # 첫 접속시 안내 메시지 표시
-    if not is_admin and st.session_state.get('first_visit', True):
-        st.markdown("### 🏢 RTB 회계 통합 보고서 시스템에 오신 것을 환영합니다")
-        st.info("📝 **관리자 로그인 후 데이터 입력을 진행하거나, 기존 보고서를 확인하실 수 있습니다.**")
-        st.session_state.first_visit = False
+
 
 
 def show_data_input():
