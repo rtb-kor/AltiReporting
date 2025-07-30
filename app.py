@@ -773,7 +773,7 @@ def show_semi_annual_report():
             period_data[month_key] = all_data[month_key]
     
     if not period_data:
-        st.warning(f"{year}년 {period_name} 데이터가 없습니다.")
+        st.info("**데이터 입력 안내**: '데이터 입력' 메뉴에서 월별 데이터를 입력하면 자동으로 반기 보고서에 반영됩니다.")
         return
     
     # 반기 집계
