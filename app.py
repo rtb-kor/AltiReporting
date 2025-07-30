@@ -95,6 +95,15 @@ st.markdown("""
         text-shadow: 1px 1px 3px rgba(0,0,0,0.5) !important;
     }
     
+    /* 월말 보고서 헤더 강제 흰색 적용 */
+    .monthly-report-header h2,
+    .monthly-report-header div,
+    .monthly-report-header strong,
+    .monthly-report-header span {
+        color: white !important;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5) !important;
+    }
+    
     /* 모바일 반응형 - 보고일정 세로 배열 */
     .schedule-card {
         background: #f8f9fa;
@@ -451,11 +460,11 @@ def show_monthly_report():
         report_month = month + 1
     
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #B8344F, #D32F4A); color: white; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);">
+    <div class="monthly-report-header" style="background: linear-gradient(135deg, #B8344F, #D32F4A); color: white !important; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);">
         <h2 style="color: white !important; margin: 0; font-size: 1.4rem; font-family: 'Inter', sans-serif; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">RTB {year}년 월말보고</h2>
         <div style="margin-top: 0.8rem; font-size: 0.9rem; color: white !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
-            <strong>보고일:</strong> {report_year}년 {report_month:02d}월 15일 &nbsp;&nbsp;|&nbsp;&nbsp;
-            <strong>작성자:</strong> RTB 회계팀
+            <strong style="color: white !important;">보고일:</strong> <span style="color: white !important;">{report_year}년 {report_month:02d}월 15일</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong style="color: white !important;">작성자:</strong> <span style="color: white !important;">RTB 회계팀</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
