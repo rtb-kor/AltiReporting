@@ -8,7 +8,7 @@ RTB 회계 통합 보고서 시스템은 Streamlit 기반의 웹 애플리케이
 
 Preferred communication style: Simple, everyday language.
 매출처 설정: 
-- 전자세금계산서매출: Everllence Prime, SUNJIN & FMD, USNS, RENK, Vine Plant, 종합해사, Mitsui, Jodiac, BCKR
+- 전자세금계산서매출: Everllence Prime, SUNJIN & FMD, USNS, RENK, Vine Plant, 종합해사, Jodiac, BCKR
 - 영세매출: Everllence LEO, Mitsui
 - 기타매출: 기타 (동적 추가 가능)
 

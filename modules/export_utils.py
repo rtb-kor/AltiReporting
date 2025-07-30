@@ -185,7 +185,7 @@ class ExportManager:
                 
                 # 전자세금계산서매출
                 story.append(Paragraph("○ 전자세금계산서매출", normal_style))
-                electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR"]
+                electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
                 electronic_data = [['매출처', '금액']]
                 electronic_total = 0
                 for source in electronic_tax_sources:
@@ -319,7 +319,7 @@ class ExportManager:
             # 월별 매출 현황
             months = sorted(period_data.keys())
             # 매출처 구성 (전자세금계산서매출 + 영세매출 + 기타)
-            electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR"]
+            electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
             zero_rated_sources = ["Everllence LEO", "Mitsui"]
             other_sources = ["기타"]
             revenue_sources = electronic_tax_sources + [s for s in zero_rated_sources if s not in electronic_tax_sources] + other_sources
