@@ -515,11 +515,6 @@ def show_semi_annual_report():
         **작성자:** RTB 회계팀
         """)
     
-    # 월별 추이
-    st.subheader("📈 월별 실적 추이")
-    monthly_trend = st.session_state.viz_manager.create_monthly_trend_chart(period_data)
-    st.plotly_chart(monthly_trend, use_container_width=True)
-    
     # 요약 정보
     col1, col2, col3 = st.columns(3)
     
@@ -679,13 +674,6 @@ def show_annual_report():
         # 간단한 파이차트
         revenue_pie = st.session_state.viz_manager.create_revenue_summary_pie_chart(revenue_summary)
         st.plotly_chart(revenue_pie, use_container_width=True)
-    
-    st.markdown("---")
-    
-    # 월별 추이 (심플하게)
-    st.subheader("📈 월별 실적 추이")
-    monthly_trend = st.session_state.viz_manager.create_simple_monthly_trend(annual_data)
-    st.plotly_chart(monthly_trend, use_container_width=True)
     
     # 내보내기 버튼
     st.markdown("---")
