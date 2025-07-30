@@ -113,6 +113,15 @@ st.markdown("""
         text-shadow: 1px 1px 3px rgba(0,0,0,0.5) !important;
     }
     
+    /* 업체별 매출변동 비교 헤더 강제 흰색 적용 */
+    .revenue-trend-header h2,
+    .revenue-trend-header div,
+    .revenue-trend-header strong,
+    .revenue-trend-header span {
+        color: white !important;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5) !important;
+    }
+    
     /* 모바일 반응형 - 보고일정 세로 배열 */
     .schedule-card {
         background: #f8f9fa;
