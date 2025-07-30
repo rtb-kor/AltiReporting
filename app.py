@@ -104,6 +104,15 @@ st.markdown("""
         text-shadow: 1px 1px 3px rgba(0,0,0,0.5) !important;
     }
     
+    /* 반기 보고서 헤더 강제 흰색 적용 */
+    .semi-annual-report-header h2,
+    .semi-annual-report-header div,
+    .semi-annual-report-header strong,
+    .semi-annual-report-header span {
+        color: white !important;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5) !important;
+    }
+    
     /* 모바일 반응형 - 보고일정 세로 배열 */
     .schedule-card {
         background: #f8f9fa;
@@ -673,12 +682,12 @@ def show_semi_annual_report():
         report_date = f"{year + 1}년 01월 15일"
     
     st.markdown(f"""
-    <div class="report-header">
-        <h2 style="color: white !important; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">RTB {year}년 {period_name} 보고서</h2>
-        <div style="margin-top: 1rem; font-size: 1rem; color: white !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
-            <strong>보고일:</strong> {report_date} &nbsp;&nbsp;|&nbsp;&nbsp;
-            <strong>보고기간:</strong> {year}년 {months[0]}월 ~ {months[-1]}월 &nbsp;&nbsp;|&nbsp;&nbsp;
-            <strong>작성자:</strong> RTB 회계팀
+    <div class="semi-annual-report-header" style="background: linear-gradient(135deg, #B8344F, #D32F4A); color: white !important; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: white !important; margin: 0; font-size: 1.4rem; font-family: 'Inter', sans-serif; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">RTB {year}년 {period_name} 보고서</h2>
+        <div style="margin-top: 0.8rem; font-size: 0.9rem; color: white !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+            <strong style="color: white !important;">보고일:</strong> <span style="color: white !important;">{report_date}</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong style="color: white !important;">보고기간:</strong> <span style="color: white !important;">{year}년 {months[0]}월 ~ {months[-1]}월</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong style="color: white !important;">작성자:</strong> <span style="color: white !important;">RTB 회계팀</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
