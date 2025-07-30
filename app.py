@@ -55,11 +55,18 @@ st.markdown("""
     /* 보고서 헤더 박스 */
     .report-header {
         background: linear-gradient(135deg, var(--rtb-burgundy), var(--rtb-burgundy-light));
-        color: white;
+        color: white !important;
         padding: 2rem;
         border-radius: 10px;
         margin-bottom: 2rem;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .report-header h2,
+    .report-header div,
+    .report-header strong {
+        color: white !important;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
     }
     
     /* 메트릭 카드 스타일 */
@@ -373,8 +380,8 @@ def show_monthly_report():
     # 보고서 헤더
     st.markdown(f"""
     <div class="report-header">
-        <h2 style="color: white; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif;">RTB {year}년 {month}월 월말보고서</h2>
-        <div style="margin-top: 1rem; font-size: 1rem; color: white;">
+        <h2 style="color: white !important; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">RTB {year}년 {month}월 월말보고서</h2>
+        <div style="margin-top: 1rem; font-size: 1rem; color: white !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
             <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>보고기간:</strong> {year}년 {month}월 &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>작성자:</strong> RTB 회계팀
@@ -443,7 +450,7 @@ def show_monthly_report():
     st.markdown("---")
     st.markdown(f'''
     <div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white; text-align: center;">
-        <h2 style="color: white; margin: 0; font-size: 1.5rem; font-family: 'Inter', sans-serif;">순이익: {net_profit:,}원</h2>
+        <h2 style="color: white !important; margin: 0; font-size: 1.5rem; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">순이익: {net_profit:,}원</h2>
     </div>
     ''', unsafe_allow_html=True)
     
@@ -525,8 +532,8 @@ def show_semi_annual_report():
     # 보고서 헤더
     st.markdown(f"""
     <div class="report-header">
-        <h2 style="color: white; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif;">RTB {year}년 {period_name} 보고서</h2>
-        <div style="margin-top: 1rem; font-size: 1rem; color: white;">
+        <h2 style="color: white !important; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">RTB {year}년 {period_name} 보고서</h2>
+        <div style="margin-top: 1rem; font-size: 1rem; color: white !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
             <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>보고기간:</strong> {year}년 {months[0]}월 ~ {months[-1]}월 &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>작성자:</strong> RTB 회계팀
@@ -546,7 +553,7 @@ def show_semi_annual_report():
     with col2:
         st.markdown(f'<div class="metric-card"><h3 style="color: #9C2A4A; margin: 0;">{period_name} 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     with col3:
-        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white; margin: 0;">{period_name} 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">{period_name} 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
     
     # 상세 분석
     col1, col2 = st.columns(2)
@@ -613,8 +620,8 @@ def show_annual_report():
     # 보고서 헤더
     st.markdown(f"""
     <div class="report-header">
-        <h2 style="color: white; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif;">RTB {year}년 연말 보고서</h2>
-        <div style="margin-top: 1rem; font-size: 1rem; color: white;">
+        <h2 style="color: white !important; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">RTB {year}년 연말 보고서</h2>
+        <div style="margin-top: 1rem; font-size: 1rem; color: white !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
             <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>보고기간:</strong> {year}년 전체 &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>작성자:</strong> RTB 회계팀
@@ -638,7 +645,7 @@ def show_annual_report():
         st.markdown(f'<div class="metric-card"><h3 style="color: #9C2A4A; margin: 0;">연간 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     
     with col3:
-        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white; margin: 0;">연간 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">연간 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
     
     st.markdown("---")
     
