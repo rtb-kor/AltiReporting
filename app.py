@@ -30,23 +30,25 @@ st.markdown("""
     /* 전체 앱 스타일 */
     .main .block-container {
         padding-top: 2rem;
-        font-family: 'Georgia', 'Times New Roman', serif;
+        font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
     }
     
     /* 제목 스타일 */
     h1 {
         color: var(--rtb-burgundy) !important;
-        font-family: 'Georgia', serif !important;
-        font-weight: 700 !important;
-        border-bottom: 3px solid var(--rtb-burgundy);
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 1.8rem !important;
+        border-bottom: 2px solid var(--rtb-burgundy);
         padding-bottom: 0.5rem;
     }
     
     /* 서브헤더 스타일 */
     h2, h3 {
         color: var(--rtb-dark-gray) !important;
-        font-family: 'Georgia', serif !important;
-        font-weight: 600 !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 500 !important;
+        font-size: 1.3rem !important;
     }
     
     /* 보고서 헤더 박스 */
@@ -75,8 +77,8 @@ st.markdown("""
         color: white !important;
         border: none !important;
         border-radius: 6px !important;
-        font-family: 'Georgia', serif !important;
-        font-weight: 600 !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 500 !important;
         transition: all 0.3s ease !important;
     }
     
@@ -105,7 +107,7 @@ st.markdown("""
     
     /* 테이블 스타일 */
     .dataframe {
-        font-family: 'Georgia', serif !important;
+        font-family: 'Inter', sans-serif !important;
         border-collapse: collapse !important;
     }
     
@@ -123,9 +125,9 @@ st.markdown("""
     
     /* 숫자 강조 스타일 */
     .highlight-number {
-        font-family: 'Georgia', serif;
-        font-weight: 700;
-        font-size: 1.25rem;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 1.1rem;
         color: var(--rtb-burgundy);
     }
     
@@ -446,7 +448,7 @@ def show_monthly_report():
     # 보고서 헤더
     st.markdown(f"""
     <div class="report-header">
-        <h2 style="color: white; margin: 0; font-size: 2rem;">RTB {year}년 {month}월 월말보고서</h2>
+        <h2 style="color: white; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif;">RTB {year}년 {month}월 월말보고서</h2>
         <div style="margin-top: 1rem; font-size: 1rem; opacity: 0.9;">
             <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>보고기간:</strong> {year}년 {month}월 &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -516,7 +518,7 @@ def show_monthly_report():
     st.markdown("---")
     st.markdown(f'''
     <div class="metric-card" style="background: linear-gradient(135deg, #8B1538, #A01B47); color: white; text-align: center;">
-        <h2 style="color: white; margin: 0; font-size: 2rem;">순이익: {net_profit:,}원</h2>
+        <h2 style="color: white; margin: 0; font-size: 1.5rem; font-family: 'Inter', sans-serif;">순이익: {net_profit:,}원</h2>
     </div>
     ''', unsafe_allow_html=True)
     
@@ -598,7 +600,7 @@ def show_semi_annual_report():
     # 보고서 헤더
     st.markdown(f"""
     <div class="report-header">
-        <h2 style="color: white; margin: 0; font-size: 2rem;">RTB {year}년 {period_name} 보고서</h2>
+        <h2 style="color: white; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif;">RTB {year}년 {period_name} 보고서</h2>
         <div style="margin-top: 1rem; font-size: 1rem; opacity: 0.9;">
             <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>보고기간:</strong> {year}년 {months[0]}월 ~ {months[-1]}월 &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -686,7 +688,7 @@ def show_annual_report():
     # 보고서 헤더
     st.markdown(f"""
     <div class="report-header">
-        <h2 style="color: white; margin: 0; font-size: 2rem;">RTB {year}년 연말 보고서</h2>
+        <h2 style="color: white; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif;">RTB {year}년 연말 보고서</h2>
         <div style="margin-top: 1rem; font-size: 1rem; opacity: 0.9;">
             <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>보고기간:</strong> {year}년 전체 &nbsp;&nbsp;|&nbsp;&nbsp;

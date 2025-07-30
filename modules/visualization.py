@@ -66,12 +66,12 @@ class VisualizationManager:
                 'text': '매출처별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 18, 'family': 'Georgia', 'color': '#8B1538'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#8B1538'}
             },
             showlegend=True,
             height=400,
             margin=dict(t=50, b=50, l=50, r=50),
-            font=dict(family="Georgia", size=12, color='#374151'),
+            font=dict(family="Inter, sans-serif", size=12, color='#374151'),
             plot_bgcolor='white',
             paper_bgcolor='white'
         )
@@ -124,12 +124,12 @@ class VisualizationManager:
                 'text': '매입 항목별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 18, 'family': 'Georgia', 'color': '#8B1538'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#8B1538'}
             },
             showlegend=True,
             height=400,
             margin=dict(t=50, b=50, l=50, r=50),
-            font=dict(family="Georgia", size=12, color='#374151'),
+            font=dict(family="Inter, sans-serif", size=12, color='#374151'),
             plot_bgcolor='white',
             paper_bgcolor='white'
         )
