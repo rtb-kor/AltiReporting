@@ -587,11 +587,11 @@ class VisualizationManager:
         categories = ['매출', '매입', '순이익']
         values = [total_revenue, total_expense, net_profit]
         
-        # 직관적인 색상 설정: 매출=빨강, 매입=파랑, 순이익=조건부
+        # 직관적인 색상 설정: 매출=빨강, 매입=파랑, 순이익=조건부 (채도 낮춤)
         colors = [
-            'red',  # 매출 - 빨간색
-            'blue',  # 매입 - 파란색
-            'red' if net_profit >= 0 else 'blue'  # 순이익 - 흑자는 빨강, 적자는 파랑
+            '#CC5555',  # 매출 - 부드러운 빨간색
+            '#5577CC',  # 매입 - 부드러운 파란색
+            '#CC5555' if net_profit >= 0 else '#5577CC'  # 순이익 - 흑자는 부드러운 빨강, 적자는 부드러운 파랑
         ]
         
         fig = go.Figure()
