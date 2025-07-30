@@ -202,9 +202,9 @@ def main():
         st.header("📋 메뉴")
         
         if is_admin:
-            menu_options = ["📊 대시보드", "📝 데이터 입력", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "⚙️ 설정"]
+            menu_options = ["📝 데이터 입력", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "⚙️ 설정"]
         else:
-            menu_options = ["📊 대시보드", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서"]
+            menu_options = ["📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서"]
         
         menu = st.selectbox(
             "보고서 유형 선택",
@@ -220,9 +220,7 @@ def main():
         st.markdown(f"**오늘 날짜:** {today.strftime('%Y년 %m월 %d일')}")
     
     # 메뉴별 페이지 라우팅
-    if menu == "📊 대시보드":
-        show_dashboard()
-    elif menu == "📝 데이터 입력":
+    if menu == "📝 데이터 입력":
         if is_admin:
             show_data_input()
         else:
@@ -238,87 +236,13 @@ def main():
             show_settings()
         else:
             st.error("🔒 관리자만 접근 가능한 메뉴입니다.")
+    
+    # 첫 접속시 안내 메시지 표시
+    if not is_admin and st.session_state.get('first_visit', True):
+        st.markdown("### 🏢 RTB 회계 통합 보고서 시스템에 오신 것을 환영합니다")
+        st.info("📝 **관리자 로그인 후 데이터 입력을 진행하거나, 기존 보고서를 확인하실 수 있습니다.**")
+        st.session_state.first_visit = False
 
-def show_dashboard():
-    st.header("📊 RTB 회계 대시보드")
-    
-    # 최근 데이터 요약
-    data = st.session_state.data_manager.get_all_data()
-    
-    if not data:
-        st.warning("입력된 데이터가 없습니다. '데이터 입력' 메뉴에서 데이터를 입력해주세요.")
-        st.info("💡 **자동 집계 시스템**: 월별 데이터를 입력하면 반기/연말 보고서에 자동으로 반영됩니다.")
-        return
-    
-    # 기본 통계
-    col1, col2, col3, col4 = st.columns(4)
-    
-    latest_month = max(data.keys()) if data else None
-    if latest_month:
-        latest_data = data[latest_month]
-        total_revenue = sum(latest_data.get('매출', {}).values())
-        total_expenses = sum(latest_data.get('매입', {}).values())
-        net_profit = total_revenue - total_expenses
-        
-        with col1:
-            st.metric("최근월 총 매출", f"{total_revenue:,}원")
-        with col2:
-            st.metric("최근월 총 매입", f"{total_expenses:,}원")
-        with col3:
-            st.metric("최근월 순이익", f"{net_profit:,}원", delta=f"{net_profit}")
-        with col4:
-            revenue_growth = (net_profit / total_revenue * 100) if total_revenue > 0 else 0
-            st.metric("수익률", f"{revenue_growth:.1f}%")
-    
-    st.markdown("---")
-    
-    # 시각화
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("🏭 매출처별 분포")
-        if latest_month and data[latest_month].get('매출'):
-            pie_chart = st.session_state.viz_manager.create_revenue_pie_chart(data[latest_month]['매출'])
-            st.plotly_chart(pie_chart, use_container_width=True)
-    
-    with col2:
-        st.subheader("💸 매입 항목별 분포")
-        if latest_month and data[latest_month].get('매입'):
-            expense_pie = st.session_state.viz_manager.create_expense_pie_chart(data[latest_month]['매입'])
-            st.plotly_chart(expense_pie, use_container_width=True)
-    
-    # 데이터 입력 현황 표시
-    st.markdown("---")
-    st.subheader("📅 데이터 입력 현황")
-    
-    # 현재 연도 기준으로 월별 입력 현황 표시
-    current_year = datetime.now().year
-    months_with_data = []
-    months_without_data = []
-    
-    for month in range(1, 13):
-        month_key = f"{current_year}-{month:02d}"
-        if month_key in data:
-            months_with_data.append(f"{month}월")
-        else:
-            months_without_data.append(f"{month}월")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        if months_with_data:
-            st.success(f"**입력 완료 ({len(months_with_data)}개월)**: {', '.join(months_with_data)}")
-        else:
-            st.info("입력된 데이터가 없습니다.")
-    
-    with col2:
-        if months_without_data:
-            st.warning(f"**입력 필요 ({len(months_without_data)}개월)**: {', '.join(months_without_data)}")
-        else:
-            st.success("모든 월 데이터 입력 완료!")
-    
-    if months_with_data:
-        st.info(f"💡 **자동 집계**: 입력된 {len(months_with_data)}개월 데이터가 반기/연말 보고서에 자동 반영됩니다.")
 
 def show_data_input():
     st.header("📝 데이터 입력")
