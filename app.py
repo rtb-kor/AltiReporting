@@ -130,12 +130,25 @@ def show_data_input():
         st.subheader("💰 매출 입력")
         
         # 매출처별 입력
-        revenue_sources = ["현대중공업", "삼성중공업", "STX조선해양", "해외업체(USD)", "기타"]
+        revenue_sources = ["EverllenceLEO", "EverllencePrime", "SunJin&FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
         revenue_data = {}
         
+        # 새로운 매출처 추가 기능
+        st.subheader("📝 매출처 관리")
+        with st.expander("새 매출처 추가"):
+            new_source = st.text_input("새 매출처명 입력")
+            if st.button("매출처 추가") and new_source:
+                if new_source not in revenue_sources:
+                    revenue_sources.insert(-1, new_source)  # '기타' 앞에 삽입
+                    st.success(f"'{new_source}' 매출처가 추가되었습니다.")
+                    st.rerun()
+                else:
+                    st.warning("이미 존재하는 매출처입니다.")
+        
+        # 매출처별 금액 입력
         for source in revenue_sources:
             current_value = existing_data.get('매출', {}).get(source, 0)
-            if source == "해외업체(USD)":
+            if "USD" in source or source in ["USNS", "RENK", "Vine Plant", "Mitsui", "Jodiac", "BCKR"]:
                 value = st.number_input(f"{source} (원화환산)", value=current_value, min_value=0, step=1000000)
             else:
                 value = st.number_input(f"{source} (원)", value=current_value, min_value=0, step=1000000)

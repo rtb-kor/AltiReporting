@@ -59,7 +59,7 @@ class DataManager:
         }
         
         # 매출처별 집계
-        revenue_sources = ["현대중공업", "삼성중공업", "STX조선해양", "해외업체(USD)", "기타"]
+        revenue_sources = ["EverllenceLEO", "EverllencePrime", "SunJin&FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
         for source in revenue_sources:
             total = 0
             for month_data in period_data.values():
@@ -120,7 +120,7 @@ class DataManager:
                 return False
         
         # 매출처 검증
-        required_revenue_sources = ["현대중공업", "삼성중공업", "STX조선해양", "해외업체(USD)", "기타"]
+        required_revenue_sources = ["EverllenceLEO", "EverllencePrime", "SunJin&FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
         for source in required_revenue_sources:
             if source not in data.get('매출', {}):
                 data['매출'][source] = 0
