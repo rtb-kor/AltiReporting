@@ -318,7 +318,7 @@ def show_data_input():
         revenue_data["기타"] = other_revenue
         
         total_revenue = sum(revenue_data.values())
-        st.success(f"**총 매출: {total_revenue:,}원**")
+        st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid red;"><h4 style="color: red; margin: 0;">총 매출: {total_revenue:,}원</h4></div>', unsafe_allow_html=True)
     
     with col2:
         st.subheader("매입")
@@ -331,8 +331,8 @@ def show_data_input():
         
         total_expense = sum(expense_data.values())
         net_profit = total_revenue - total_expense
-        st.success(f"**총 매입: {total_expense:,}원**")
-        st.success(f"**순이익: {net_profit:,}원**")
+        st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid blue;"><h4 style="color: blue; margin: 0;">총 매입: {total_expense:,}원</h4></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #9C2A4A;"><h4 style="color: #9C2A4A; margin: 0;">순이익: {net_profit:,}원</h4></div>', unsafe_allow_html=True)
     
     # 저장 버튼
     st.markdown("---")
@@ -346,9 +346,9 @@ def show_data_input():
         st.session_state.data_manager.save_month_data(month_key, month_data)
         
         # 성공 메시지와 자동 반영 안내
-        st.success(f"✅ {year}년 {month}월 데이터가 저장되었습니다!")
+        st.success(f"{year}년 {month}월 데이터가 저장되었습니다!")
         st.info("""
-        📊 **자동 집계 시스템 안내**
+        **자동 집계 시스템 안내**
         - 반기 보고서: 저장한 월별 데이터가 자동으로 상/하반기 집계에 반영됩니다
         - 연말 보고서: 저장한 월별 데이터가 자동으로 연간 집계에 반영됩니다
         - 새로 추가한 매출처/매입처도 자동으로 보고서에 포함됩니다
@@ -356,7 +356,7 @@ def show_data_input():
         st.rerun()
 
 def show_monthly_report():
-    st.header("📈 월말 보고서")
+    st.header("월말 보고서")
     
     # 년월 선택
     col1, col2 = st.columns(2)
