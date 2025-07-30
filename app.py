@@ -332,7 +332,7 @@ def show_data_input():
         total_expense = sum(expense_data.values())
         net_profit = total_revenue - total_expense
         st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid blue;"><h4 style="color: blue !important; margin: 0;">총 매입: {total_expense:,}원</h4></div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #9C2A4A;"><h4 style="color: #9C2A4A; margin: 0;">순이익: {net_profit:,}원</h4></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); padding: 1rem; border-radius: 0.5rem; color: white;"><h4 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">순이익: {net_profit:,}원</h4></div>', unsafe_allow_html=True)
     
     # 저장 버튼
     st.markdown("---")
