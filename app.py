@@ -811,8 +811,8 @@ def show_annual_report():
     
     st.markdown("---")
     
-    # 매출/매입 비교 분석
-    st.subheader("매출 vs 매입 비교")
+    # 매출/매입 상세 분석
+    st.subheader("매출 vs 매입 상세 분석")
     
     col1, col2 = st.columns(2)
     
@@ -842,10 +842,6 @@ def show_annual_report():
         revenue_df['금액'] = revenue_df['금액'].apply(lambda x: f"{x:,}원")
         revenue_df['비율'] = [f"{(v/total_revenue*100):.1f}%" for v in revenue_summary.values()]
         st.dataframe(revenue_df, hide_index=True, use_container_width=True)
-        
-        # 매출 파이차트
-        revenue_pie = st.session_state.viz_manager.create_revenue_summary_pie_chart(revenue_summary)
-        st.plotly_chart(revenue_pie, use_container_width=True, key="annual_revenue_pie_detail")
     
     with col2:
         st.markdown("#### 매입 세부 내역")
@@ -856,10 +852,6 @@ def show_annual_report():
         expense_df['금액'] = expense_df['금액'].apply(lambda x: f"{x:,}원")
         expense_df['비율'] = [f"{(v/total_expense*100):.1f}%" for v in annual_summary['매입'].values()]
         st.dataframe(expense_df, hide_index=True, use_container_width=True)
-        
-        # 매입 파이차트
-        expense_pie = st.session_state.viz_manager.create_expense_pie_chart(annual_summary['매입'])
-        st.plotly_chart(expense_pie, use_container_width=True, key="annual_expense_pie_detail")
     
     # 구성 비교 차트 (매출구성 vs 매입분포)
     st.markdown("---")
