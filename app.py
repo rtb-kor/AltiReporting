@@ -128,7 +128,6 @@ st.markdown("""
         padding: 1rem;
         border-radius: 8px;
         margin-bottom: 0.5rem;
-        border-left: 4px solid var(--rtb-burgundy);
     }
     
     .schedule-item {
