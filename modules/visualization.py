@@ -6,14 +6,14 @@ from typing import Dict, Any
 
 class VisualizationManager:
     def __init__(self):
-        # RTB 브랜드 색상 팔레트 (버건디와 그레이 기반)
+        # RTB 브랜드 색상 팔레트 (밝고 경쾌한 버건디 기반)
         self.color_palette = [
-            '#8B1538',  # RTB 버건디
-            '#A01B47',  # 밝은 버건디
+            '#DC2626',  # 새로운 RTB 버건디 (경쾌한)
+            '#EF4444',  # 밝은 버건디
+            '#F87171',  # 더 밝은 레드
             '#6B7280',  # RTB 그레이
             '#374151',  # 진한 그레이
-            '#B91C1C',  # 레드
-            '#DC2626',  # 밝은 레드
+            '#B91C1C',  # 진한 레드
             '#9CA3AF',  # 밝은 그레이
             '#4B5563',  # 중간 그레이
             '#F3F4F6',  # 연한 그레이
@@ -66,7 +66,7 @@ class VisualizationManager:
                 'text': '매출처별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#8B1538'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#DC2626'}
             },
             showlegend=True,
             height=400,
@@ -124,7 +124,7 @@ class VisualizationManager:
                 'text': '매입 항목별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#8B1538'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#DC2626'}
             },
             showlegend=True,
             height=400,
