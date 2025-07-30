@@ -525,13 +525,33 @@ def show_monthly_report():
     
     with col2:
         st.subheader("매입 현황")
-        expense_df = pd.DataFrame(list(data['매입'].items()))
-        expense_df.columns = ['항목', '금액(원)']
-        expense_df['금액(원)'] = expense_df['금액(원)'].apply(lambda x: f"{x:,}")
-        st.dataframe(expense_df, hide_index=True, use_container_width=True)
         
+        # 매입 항목별 카드
+        expense_items = []
+        for item, amount in data['매입'].items():
+            if amount > 0:  # 0원이 아닌 경우만 표시
+                expense_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid #e9ecef;"><span>{item}</span><span style="font-weight: 600;">{amount:,}원</span></div>')
+        
+        expense_content = ''.join(expense_items) if expense_items else '<div style="text-align: center; color: #6c757d;">데이터 없음</div>'
+        
+        st.markdown(f'''
+        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #6c757d; margin-bottom: 1rem;">
+            <h4 style="margin: 0 0 1rem 0; color: #2c3e50; font-weight: 600;">매입 항목</h4>
+            <div style="background: white; padding: 1rem; border-radius: 6px;">
+                {expense_content}
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        # 매입 총계
         total_expense = sum(data['매입'].values())
-        st.markdown(f'<div class="metric-card"><h3 style="margin: 0;">매입 총계: <span style="color: blue !important;">{total_expense:,}원</span></h3></div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div style="background: white; border: 2px solid #e9ecef; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+            <h3 style="margin: 0; color: blue; text-align: center; font-size: 1.4rem; font-weight: 700;">
+                매입 총계: {total_expense:,}원
+            </h3>
+        </div>
+        ''', unsafe_allow_html=True)
     
     # 순이익 계산
     net_profit = total_revenue - total_expense
