@@ -417,3 +417,154 @@ class VisualizationManager:
         )
         
         return fig
+    
+    def create_revenue_summary_pie_chart(self, revenue_summary: Dict[str, int]) -> go.Figure:
+        """매출 구성 요약 파이차트 생성 (전자세금계산서/영세/기타)"""
+        if not revenue_summary or sum(revenue_summary.values()) == 0:
+            fig = go.Figure()
+            fig.add_annotation(
+                text="매출 데이터가 없습니다",
+                xref="paper", yref="paper",
+                x=0.5, y=0.5, xanchor='center', yanchor='middle',
+                showarrow=False, font_size=16
+            )
+            return fig
+        
+        # 0이 아닌 값만 필터링
+        filtered_data = {k: v for k, v in revenue_summary.items() if v > 0}
+        
+        if not filtered_data:
+            fig = go.Figure()
+            fig.add_annotation(
+                text="매출 데이터가 없습니다",
+                xref="paper", yref="paper",
+                x=0.5, y=0.5, xanchor='center', yanchor='middle',
+                showarrow=False, font_size=16
+            )
+            return fig
+        
+        labels = list(filtered_data.keys())
+        values = list(filtered_data.values())
+        
+        # 매출 유형별 색상
+        colors = ['#FF6B6B', '#4ECDC4', '#45B7D1']
+        
+        fig = go.Figure(data=[go.Pie(
+            labels=labels,
+            values=values,
+            hole=0.4,
+            marker_colors=colors[:len(labels)],
+            texttemplate='%{label}<br>%{percent}',
+            textposition="auto",
+            textfont_size=12,
+            hovertemplate='<b>%{label}</b><br>' +
+                         '금액: %{value:,}원<br>' +
+                         '비율: %{percent}<br>' +
+                         '<extra></extra>'
+        )])
+        
+        fig.update_layout(
+            title={
+                'text': '매출 구성',
+                'x': 0.5,
+                'xanchor': 'center',
+                'font': {'size': 16}
+            },
+            showlegend=True,
+            height=350,
+            margin=dict(t=40, b=40, l=40, r=40),
+            font=dict(family="Arial", size=11)
+        )
+        
+        return fig
+    
+    def create_simple_monthly_trend(self, monthly_data: Dict[str, Any]) -> go.Figure:
+        """심플한 월별 추이 차트 (매출/순이익만)"""
+        if not monthly_data:
+            fig = go.Figure()
+            fig.add_annotation(
+                text="데이터가 없습니다",
+                xref="paper", yref="paper",
+                x=0.5, y=0.5, xanchor='center', yanchor='middle',
+                showarrow=False, font_size=16
+            )
+            return fig
+        
+        # 데이터 준비
+        months = sorted(monthly_data.keys())
+        revenues = []
+        profits = []
+        
+        for month in months:
+            data = monthly_data[month]
+            revenue = sum(data.get('매출', {}).values())
+            expense = sum(data.get('매입', {}).values())
+            profit = revenue - expense
+            
+            revenues.append(revenue)
+            profits.append(profit)
+        
+        # 월 표시를 위한 라벨 생성
+        month_labels = [f"{int(month.split('-')[1])}월" for month in months]
+        
+        fig = go.Figure()
+        
+        # 매출 막대그래프
+        fig.add_trace(go.Bar(
+            x=month_labels,
+            y=revenues,
+            name='매출',
+            marker_color='#4ECDC4',
+            yaxis='y',
+            hovertemplate='<b>매출</b><br>' +
+                         '%{x}: %{y:,}원<br>' +
+                         '<extra></extra>'
+        ))
+        
+        # 순이익 라인차트
+        fig.add_trace(go.Scatter(
+            x=month_labels,
+            y=profits,
+            mode='lines+markers',
+            name='순이익',
+            line=dict(color='#FF6B6B', width=3),
+            marker=dict(size=8),
+            yaxis='y2',
+            hovertemplate='<b>순이익</b><br>' +
+                         '%{x}: %{y:,}원<br>' +
+                         '<extra></extra>'
+        ))
+        
+        fig.update_layout(
+            title={
+                'text': '월별 실적 추이',
+                'x': 0.5,
+                'xanchor': 'center',
+                'font': {'size': 16}
+            },
+            xaxis_title="월",
+            yaxis=dict(
+                title="매출 (원)",
+                side="left",
+                showgrid=True
+            ),
+            yaxis2=dict(
+                title="순이익 (원)",
+                side="right",
+                overlaying="y",
+                showgrid=False
+            ),
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1
+            ),
+            height=400,
+            margin=dict(t=60, b=50, l=50, r=50),
+            font=dict(family="Arial", size=12),
+            hovermode='x unified'
+        )
+        
+        return fig

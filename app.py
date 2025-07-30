@@ -593,13 +593,6 @@ def show_annual_report():
     # 연간 집계
     annual_summary = st.session_state.data_manager.aggregate_period_data(annual_data)
     
-    # 상하반기 분리 집계
-    first_half = {k: v for k, v in annual_data.items() if int(k.split('-')[1]) <= 6}
-    second_half = {k: v for k, v in annual_data.items() if int(k.split('-')[1]) > 6}
-    
-    first_half_summary = st.session_state.data_manager.aggregate_period_data(first_half) if first_half else {}
-    second_half_summary = st.session_state.data_manager.aggregate_period_data(second_half) if second_half else {}
-    
     st.markdown("---")
     
     # 보고서 헤더
@@ -607,79 +600,128 @@ def show_annual_report():
     
     with header_col1:
         try:
-            st.image("assets/rtb_logo.png", width=80)
+            st.image("assets/rtb_logo.png", width=100)
         except:
             st.write("🏢")
     
     with header_col2:
         st.markdown(f"""
-        ## RTB {year}년 연말 종합 보고서
+        # RTB {year}년 연말 보고서
         **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
-        **보고기간:** {year}년 1월 1일 ~ {year}년 12월 31일  
-        **작성자:** RTB 회계팀장
+        **보고기간:** {year}년 전체  
+        **작성:** RTB 회계팀
         """)
     
-    # 연간 요약
-    col1, col2, col3, col4 = st.columns(4)
+    st.markdown("---")
     
+    # 핵심 지표 (큰 숫자로 강조)
     total_revenue = sum(annual_summary['매출'].values())
     total_expense = sum(annual_summary['매입'].values())
     net_profit = total_revenue - total_expense
-    profit_margin = (net_profit / total_revenue * 100) if total_revenue > 0 else 0
+    
+    col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric("연간 총 매출", f"{total_revenue:,}원")
+        st.metric(
+            label="💰 연간 총 매출",
+            value=f"{total_revenue:,}원",
+            delta=None
+        )
+    
     with col2:
-        st.metric("연간 총 매입", f"{total_expense:,}원")
+        st.metric(
+            label="💸 연간 총 매입", 
+            value=f"{total_expense:,}원",
+            delta=None
+        )
+    
     with col3:
-        st.metric("연간 순이익", f"{net_profit:,}원")
-    with col4:
-        st.metric("수익률", f"{profit_margin:.1f}%")
+        profit_color = "normal" if net_profit >= 0 else "inverse"
+        st.metric(
+            label="🎯 연간 순이익",
+            value=f"{net_profit:,}원",
+            delta=f"{net_profit:,}원" if net_profit != 0 else None
+        )
     
-    # 상하반기 비교
-    st.subheader("📊 상하반기 비교 분석")
+    st.markdown("---")
     
-    if first_half_summary and second_half_summary:
-        comparison_data = {
-            '구분': ['상반기', '하반기', '증감'],
-            '매출': [
-                sum(first_half_summary['매출'].values()),
-                sum(second_half_summary['매출'].values()),
-                sum(second_half_summary['매출'].values()) - sum(first_half_summary['매출'].values())
-            ],
-            '매입': [
-                sum(first_half_summary['매입'].values()),
-                sum(second_half_summary['매입'].values()),
-                sum(second_half_summary['매입'].values()) - sum(first_half_summary['매입'].values())
-            ]
-        }
-        comparison_data['순이익'] = [
-            comparison_data['매출'][0] - comparison_data['매입'][0],
-            comparison_data['매출'][1] - comparison_data['매입'][1],
-            comparison_data['매출'][2] - comparison_data['매입'][2]
-        ]
-        
-        comparison_df = pd.DataFrame(comparison_data)
-        comparison_df.iloc[:, 1:] = comparison_df.iloc[:, 1:].applymap(lambda x: f"{x:,}원")
-        st.dataframe(comparison_df, hide_index=True, use_container_width=True)
+    # 매출 세부 내역 (심플하게)
+    st.subheader("📊 매출 세부 내역")
     
-    # 연간 추이 차트
-    st.subheader("📈 연간 실적 추이")
-    annual_trend = st.session_state.viz_manager.create_monthly_trend_chart(annual_data)
-    st.plotly_chart(annual_trend, use_container_width=True)
+    # 전자세금계산서매출 소계
+    electronic_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
+    electronic_total = sum(annual_summary['매출'].get(source, 0) for source in electronic_sources)
     
-    # 매출처별 연간 분석
+    # 영세매출 소계
+    zero_sources = ["Everllence LEO", "Mitsui"]
+    zero_total = sum(annual_summary['매출'].get(source, 0) for source in zero_sources)
+    
+    # 기타매출
+    other_total = annual_summary['매출'].get("기타", 0)
+    
+    revenue_summary = {
+        "전자세금계산서매출": electronic_total,
+        "영세매출": zero_total,
+        "기타매출": other_total
+    }
+    
+    col1, col2 = st.columns([1, 1])
+    
+    with col1:
+        # 간단한 매출 구성 표
+        revenue_df = pd.DataFrame(list(revenue_summary.items()))
+        revenue_df.columns = ['구분', '금액']
+        revenue_df['금액'] = revenue_df['금액'].apply(lambda x: f"{x:,}원")
+        revenue_df['비율'] = [f"{(v/total_revenue*100):.1f}%" for v in revenue_summary.values()]
+        st.dataframe(revenue_df, hide_index=True, use_container_width=True)
+    
+    with col2:
+        # 간단한 파이차트
+        revenue_pie = st.session_state.viz_manager.create_revenue_summary_pie_chart(revenue_summary)
+        st.plotly_chart(revenue_pie, use_container_width=True)
+    
+    st.markdown("---")
+    
+    # 월별 추이 (심플하게)
+    st.subheader("📈 월별 실적 추이")
+    monthly_trend = st.session_state.viz_manager.create_simple_monthly_trend(annual_data)
+    st.plotly_chart(monthly_trend, use_container_width=True)
+    
+    # 내보내기 버튼
+    st.markdown("---")
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("🏭 매출처별 연간 실적")
-        revenue_pie = st.session_state.viz_manager.create_revenue_pie_chart(annual_summary['매출'])
-        st.plotly_chart(revenue_pie, use_container_width=True)
+        if st.button("📄 PDF 다운로드", key="annual_pdf"):
+            report_data = {
+                'period': f"{year}년",
+                'summary': annual_summary,
+                'total_revenue': total_revenue,
+                'total_expense': total_expense,
+                'net_profit': net_profit,
+                'revenue_summary': revenue_summary
+            }
+            pdf_file = st.session_state.export_manager.generate_pdf_report(report_data, f"RTB_{year}년_연말보고서")
+            with open(pdf_file, "rb") as file:
+                st.download_button(
+                    label="📥 PDF 파일 다운로드",
+                    data=file.read(),
+                    file_name=f"RTB_{year}년_연말보고서.pdf",
+                    mime="application/pdf",
+                    key="annual_pdf_download"
+                )
     
     with col2:
-        st.subheader("💸 매입 항목별 연간 실적")
-        expense_pie = st.session_state.viz_manager.create_expense_pie_chart(annual_summary['매입'])
-        st.plotly_chart(expense_pie, use_container_width=True)
+        if st.button("📊 Excel 다운로드", key="annual_excel"):
+            excel_file = st.session_state.export_manager.generate_excel_report(annual_summary, f"RTB_{year}년_연말보고서")
+            with open(excel_file, "rb") as file:
+                st.download_button(
+                    label="📥 Excel 파일 다운로드",
+                    data=file.read(),
+                    file_name=f"RTB_{year}년_연말보고서.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    key="annual_excel_download"
+                )
 
 def show_settings():
     st.header("⚙️ 시스템 설정")
