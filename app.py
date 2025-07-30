@@ -276,9 +276,9 @@ def main():
         st.header("📋 메뉴")
         
         if is_admin:
-            menu_options = ["📝 데이터 입력", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "⚙️ 설정"]
+            menu_options = ["📝 데이터 입력", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "📈 업체별 매출변동 비교", "⚙️ 설정"]
         else:
-            menu_options = ["📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서"]
+            menu_options = ["📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "📈 업체별 매출변동 비교"]
         
         menu = st.selectbox(
             "보고서 유형 선택",
@@ -322,6 +322,8 @@ def main():
         show_semi_annual_report()
     elif menu == "📋 연말 보고서":
         show_annual_report()
+    elif menu == "📈 업체별 매출변동 비교":
+        show_revenue_trend_comparison()
     elif menu == "⚙️ 설정":
         if is_admin:
             show_settings()
@@ -1095,6 +1097,165 @@ def show_settings():
         • 지원: 매출처별 분석, PDF/Excel 내보내기
         • 업데이트: 2025년 7월
         """)
+
+def show_revenue_trend_comparison():
+    st.header("업체별 매출변동 비교")
+    
+    # 연도 범위 선택
+    col1, col2 = st.columns(2)
+    with col1:
+        start_year = st.selectbox("시작 연도", list(range(2020, 2030)), index=3, key="trend_start_year")
+    with col2:
+        end_year = st.selectbox("종료 연도", list(range(2020, 2030)), index=5, key="trend_end_year")
+    
+    if start_year > end_year:
+        st.error("시작 연도가 종료 연도보다 클 수 없습니다.")
+        return
+    
+    # 전체 데이터 수집
+    all_data = st.session_state.data_manager.get_all_data()
+    
+    # 매출처별 연도별 데이터 집계
+    revenue_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR", 
+                      "Everllence LEO", "Mitsui", "기타"]
+    
+    # 연도별 매출처별 데이터 구조: {year: {source: total_amount}}
+    yearly_data = {}
+    years = list(range(start_year, end_year + 1))
+    
+    for year in years:
+        yearly_data[year] = {source: 0 for source in revenue_sources}
+        
+        # 해당 연도의 모든 월 데이터 합계
+        for month in range(1, 13):
+            month_key = f"{year}-{month:02d}"
+            if month_key in all_data:
+                month_data = all_data[month_key].get('매출', {})
+                for source in revenue_sources:
+                    yearly_data[year][source] += month_data.get(source, 0)
+    
+    # 데이터가 있는지 확인
+    has_data = any(sum(yearly_data[year].values()) > 0 for year in years)
+    if not has_data:
+        st.warning(f"{start_year}년부터 {end_year}년까지 매출 데이터가 없습니다.")
+        st.info("**데이터 입력 안내**: '데이터 입력' 메뉴에서 월별 데이터를 입력하면 자동으로 반영됩니다.")
+        return
+    
+    st.markdown("---")
+    
+    # 보고서 헤더
+    st.markdown(f"""
+    <div class="revenue-trend-header" style="background: linear-gradient(135deg, #B8344F, #D32F4A); color: white !important; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: white !important; margin: 0; font-size: 1.4rem; font-family: 'Inter', sans-serif; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">업체별 매출변동 비교 분석</h2>
+        <div style="margin-top: 0.8rem; font-size: 0.9rem; color: white !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+            <strong style="color: white !important;">분석기간:</strong> <span style="color: white !important;">{start_year}년 ~ {end_year}년</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong style="color: white !important;">작성자:</strong> <span style="color: white !important;">RTB 회계팀</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 꺾은선 그래프 생성
+    st.subheader("매출처별 연도별 매출 추이")
+    
+    # Plotly 그래프 데이터 준비
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    
+    fig = go.Figure()
+    
+    # 색상 팔레트
+    colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9', '#F8C471']
+    
+    for i, source in enumerate(revenue_sources):
+        amounts = [yearly_data[year][source] for year in years]
+        
+        # 0이 아닌 데이터가 있는 경우만 그래프에 추가
+        if any(amount > 0 for amount in amounts):
+            fig.add_trace(go.Scatter(
+                x=years,
+                y=amounts,
+                mode='lines+markers',
+                name=source,
+                line=dict(color=colors[i % len(colors)], width=3),
+                marker=dict(size=8, symbol='circle'),
+                hovertemplate=f'<b>{source}</b><br>연도: %{{x}}<br>매출: %{{y:,.0f}}원<extra></extra>'
+            ))
+    
+    fig.update_layout(
+        title='매출처별 연도별 매출 추이',
+        xaxis_title='연도',
+        yaxis_title='매출 (원)',
+        font=dict(family='Inter, sans-serif'),
+        hovermode='x unified',
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
+        height=600,
+        template='plotly_white'
+    )
+    
+    fig.update_xaxes(tickmode='linear', tick0=start_year, dtick=1)
+    fig.update_yaxes(tickformat=',.0f')
+    
+    st.plotly_chart(fig, use_container_width=True, key="revenue_trend_line_chart")
+    
+    # 요약 통계
+    st.markdown("---")
+    st.subheader("매출처별 요약 통계")
+    
+    # 각 매출처별 통계 계산
+    summary_data = []
+    for source in revenue_sources:
+        amounts = [yearly_data[year][source] for year in years]
+        if any(amount > 0 for amount in amounts):
+            total = sum(amounts)
+            avg = total / len(years)
+            max_amount = max(amounts)
+            min_amount = min(amounts)
+            max_year = years[amounts.index(max_amount)]
+            min_year = years[amounts.index(min_amount)]
+            
+            summary_data.append({
+                '매출처': source,
+                '총 매출': f"{total:,}원",
+                '연평균': f"{avg:,.0f}원",
+                '최고매출': f"{max_amount:,}원 ({max_year}년)",
+                '최저매출': f"{min_amount:,}원 ({min_year}년)"
+            })
+    
+    if summary_data:
+        summary_df = pd.DataFrame(summary_data)
+        st.dataframe(summary_df, use_container_width=True, hide_index=True)
+    
+    # 매출 증감률 분석
+    st.markdown("---")
+    st.subheader("전년 대비 매출 증감률")
+    
+    if len(years) > 1:
+        growth_data = []
+        for source in revenue_sources:
+            amounts = [yearly_data[year][source] for year in years]
+            if any(amount > 0 for amount in amounts):
+                for i in range(1, len(years)):
+                    prev_amount = amounts[i-1]
+                    curr_amount = amounts[i]
+                    if prev_amount > 0:
+                        growth_rate = ((curr_amount - prev_amount) / prev_amount) * 100
+                        growth_data.append({
+                            '매출처': source,
+                            '연도': f"{years[i-1]}→{years[i]}",
+                            '이전년도': f"{prev_amount:,}원",
+                            '해당년도': f"{curr_amount:,}원",
+                            '증감률': f"{growth_rate:+.1f}%"
+                        })
+        
+        if growth_data:
+            growth_df = pd.DataFrame(growth_data)
+            st.dataframe(growth_df, use_container_width=True, hide_index=True)
 
 if __name__ == "__main__":
     main()
