@@ -564,7 +564,14 @@ def show_monthly_report():
     net_profit = total_revenue - total_expense
     st.markdown("---")
     profit_color = "red" if net_profit >= 0 else "blue"
-    st.markdown(f'<div class="metric-card"><h3 style="margin: 0;">순이익: <span style="color: {profit_color} !important;">{net_profit:,}원</span></h3></div>', unsafe_allow_html=True)
+    
+    st.markdown(f'''
+    <div style="background: white; border: 2px solid #e9ecef; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+        <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
+            순이익: <span style="color: {profit_color};">{net_profit:,}원</span>
+        </h3>
+    </div>
+    ''', unsafe_allow_html=True)
     
     # 시각화
     col1, col2 = st.columns(2)
