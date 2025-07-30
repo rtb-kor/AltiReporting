@@ -524,8 +524,8 @@ def show_monthly_report():
         total_revenue = sum(data['매출'].values())
         st.markdown(f'''
         <div style="background: white; border: 2px solid #e9ecef; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
-            <h3 style="margin: 0; color: red; text-align: center; font-size: 1.4rem; font-weight: 700;">
-                매출 총계: {total_revenue:,}원
+            <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
+                매출 총계: <span style="color: red;">{total_revenue:,}원</span>
             </h3>
         </div>
         ''', unsafe_allow_html=True)
