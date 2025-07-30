@@ -409,7 +409,8 @@ def show_monthly_report():
             electronic_data.append([source, f"{amount:,}"])
             electronic_total += amount
         
-        electronic_df = pd.DataFrame(electronic_data, columns=['매출처', '금액(원)'])
+        electronic_df = pd.DataFrame(electronic_data)
+        electronic_df.columns = ['매출처', '금액(원)']
         st.dataframe(electronic_df, hide_index=True, use_container_width=True)
         st.info(f"전자세금계산서매출 소계: {electronic_total:,}원")
         
@@ -423,14 +424,16 @@ def show_monthly_report():
             zero_data.append([source, f"{amount:,}"])
             zero_total += amount
         
-        zero_df = pd.DataFrame(zero_data, columns=['매출처', '금액(원)'])
+        zero_df = pd.DataFrame(zero_data)
+        zero_df.columns = ['매출처', '금액(원)']
         st.dataframe(zero_df, hide_index=True, use_container_width=True)
         st.info(f"영세매출 소계: {zero_total:,}원")
         
         # 기타 매출
         st.markdown("**📦 기타 매출**")
         other_amount = data['매출'].get("기타", 0)
-        other_df = pd.DataFrame([["기타", f"{other_amount:,}"]], columns=['매출처', '금액(원)'])
+        other_df = pd.DataFrame([["기타", f"{other_amount:,}"]])
+        other_df.columns = ['매출처', '금액(원)']
         st.dataframe(other_df, hide_index=True, use_container_width=True)
         
         total_revenue = sum(data['매출'].values())
@@ -438,7 +441,8 @@ def show_monthly_report():
     
     with col2:
         st.subheader("💸 매입 현황")
-        expense_df = pd.DataFrame(list(data['매입'].items()), columns=['항목', '금액(원)'])
+        expense_df = pd.DataFrame(list(data['매입'].items()))
+        expense_df.columns = ['항목', '금액(원)']
         expense_df['금액(원)'] = expense_df['금액(원)'].apply(lambda x: f"{x:,}")
         st.dataframe(expense_df, hide_index=True, use_container_width=True)
         
@@ -565,13 +569,15 @@ def show_semi_annual_report():
     
     with col1:
         st.subheader("💰 매출처별 집계")
-        revenue_df = pd.DataFrame(list(semi_annual_summary['매출'].items()), columns=['매출처', '금액(원)'])
+        revenue_df = pd.DataFrame(list(semi_annual_summary['매출'].items()))
+        revenue_df.columns = ['매출처', '금액(원)']
         revenue_df['금액(원)'] = revenue_df['금액(원)'].apply(lambda x: f"{x:,}")
         st.dataframe(revenue_df, hide_index=True, use_container_width=True)
     
     with col2:
         st.subheader("💸 매입 항목별 집계")
-        expense_df = pd.DataFrame(list(semi_annual_summary['매입'].items()), columns=['항목', '금액(원)'])
+        expense_df = pd.DataFrame(list(semi_annual_summary['매입'].items()))
+        expense_df.columns = ['항목', '금액(원)']
         expense_df['금액(원)'] = expense_df['금액(원)'].apply(lambda x: f"{x:,}")
         st.dataframe(expense_df, hide_index=True, use_container_width=True)
     
