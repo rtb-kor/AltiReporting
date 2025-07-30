@@ -318,7 +318,7 @@ def show_data_input():
         revenue_data["기타"] = other_revenue
         
         total_revenue = sum(revenue_data.values())
-        st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid red;"><h4 style="color: red; margin: 0;">총 매출: {total_revenue:,}원</h4></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid red;"><h4 style="color: red !important; margin: 0;">총 매출: {total_revenue:,}원</h4></div>', unsafe_allow_html=True)
     
     with col2:
         st.subheader("매입")
@@ -331,7 +331,7 @@ def show_data_input():
         
         total_expense = sum(expense_data.values())
         net_profit = total_revenue - total_expense
-        st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid blue;"><h4 style="color: blue; margin: 0;">총 매입: {total_expense:,}원</h4></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid blue;"><h4 style="color: blue !important; margin: 0;">총 매입: {total_expense:,}원</h4></div>', unsafe_allow_html=True)
         st.markdown(f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #9C2A4A;"><h4 style="color: #9C2A4A; margin: 0;">순이익: {net_profit:,}원</h4></div>', unsafe_allow_html=True)
     
     # 저장 버튼
@@ -433,7 +433,7 @@ def show_monthly_report():
         st.dataframe(other_df, hide_index=True, use_container_width=True)
         
         total_revenue = sum(data['매출'].values())
-        st.markdown(f'<div class="metric-card"><h3 style="color: red; margin: 0;">매출 총계: {total_revenue:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: red !important; margin: 0;">매출 총계: {total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     
     with col2:
         st.subheader("매입 현황")
@@ -443,7 +443,7 @@ def show_monthly_report():
         st.dataframe(expense_df, hide_index=True, use_container_width=True)
         
         total_expense = sum(data['매입'].values())
-        st.markdown(f'<div class="metric-card"><h3 style="color: blue; margin: 0;">매입 총계: {total_expense:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: blue !important; margin: 0;">매입 총계: {total_expense:,}원</h3></div>', unsafe_allow_html=True)
     
     # 순이익 계산
     net_profit = total_revenue - total_expense
@@ -549,9 +549,9 @@ def show_semi_annual_report():
     net_profit = total_revenue - total_expense
     
     with col1:
-        st.markdown(f'<div class="metric-card"><h3 style="color: red; margin: 0;">{period_name} 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: red !important; margin: 0;">{period_name} 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     with col2:
-        st.markdown(f'<div class="metric-card"><h3 style="color: blue; margin: 0;">{period_name} 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: blue !important; margin: 0;">{period_name} 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     with col3:
         st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">{period_name} 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
     
@@ -639,10 +639,10 @@ def show_annual_report():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown(f'<div class="metric-card"><h3 style="color: red; margin: 0;">연간 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: red !important; margin: 0;">연간 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown(f'<div class="metric-card"><h3 style="color: blue; margin: 0;">연간 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: blue !important; margin: 0;">연간 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     
     with col3:
         st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">연간 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
