@@ -204,10 +204,10 @@ def show_data_input():
         if st.session_state.get('show_electronic_management', False):
             with st.expander("🔧 전자세금계산서매출처 관리", expanded=True):
                 # 새 매출처 추가
-                col1, col2 = st.columns([3, 1])
-                with col1:
+                col_input, col_add = st.columns([3, 1])
+                with col_input:
                     new_electronic_source = st.text_input("새 전자세금계산서매출처 추가", key="new_electronic_input")
-                with col2:
+                with col_add:
                     if st.button("추가", key="add_electronic_input"):
                         if new_electronic_source and new_electronic_source not in st.session_state.revenue_sources['electronic_tax']:
                             st.session_state.revenue_sources['electronic_tax'].append(new_electronic_source)
@@ -216,16 +216,16 @@ def show_data_input():
                 
                 # 기존 매출처 수정/삭제
                 for i, source in enumerate(st.session_state.revenue_sources['electronic_tax'][:]):
-                    col1, col2, col3 = st.columns([3, 1, 1])
-                    with col1:
+                    col_edit, col_update, col_delete = st.columns([3, 1, 1])
+                    with col_edit:
                         new_name = st.text_input("", value=source, key=f"edit_electronic_input_{i}")
-                    with col2:
+                    with col_update:
                         if st.button("수정", key=f"update_electronic_input_{i}"):
                             if new_name != source:
                                 st.session_state.revenue_sources['electronic_tax'][i] = new_name
                                 st.success(f"'{source}' → '{new_name}' 변경됨")
                                 st.rerun()
-                    with col3:
+                    with col_delete:
                         if st.button("삭제", key=f"delete_electronic_input_{i}"):
                             st.session_state.revenue_sources['electronic_tax'].remove(source)
                             st.success(f"'{source}' 삭제됨")
@@ -262,10 +262,10 @@ def show_data_input():
         if st.session_state.get('show_zero_management', False):
             with st.expander("🔧 영세매출처 관리", expanded=True):
                 # 새 매출처 추가
-                col1, col2 = st.columns([3, 1])
-                with col1:
+                col_input, col_add = st.columns([3, 1])
+                with col_input:
                     new_zero_source = st.text_input("새 영세매출처 추가", key="new_zero_input")
-                with col2:
+                with col_add:
                     if st.button("추가", key="add_zero_input"):
                         if new_zero_source and new_zero_source not in st.session_state.revenue_sources['zero_rated']:
                             st.session_state.revenue_sources['zero_rated'].append(new_zero_source)
@@ -274,16 +274,16 @@ def show_data_input():
                 
                 # 기존 매출처 수정/삭제
                 for i, source in enumerate(st.session_state.revenue_sources['zero_rated'][:]):
-                    col1, col2, col3 = st.columns([3, 1, 1])
-                    with col1:
+                    col_edit, col_update, col_delete = st.columns([3, 1, 1])
+                    with col_edit:
                         new_name = st.text_input("", value=source, key=f"edit_zero_input_{i}")
-                    with col2:
+                    with col_update:
                         if st.button("수정", key=f"update_zero_input_{i}"):
                             if new_name != source:
                                 st.session_state.revenue_sources['zero_rated'][i] = new_name
                                 st.success(f"'{source}' → '{new_name}' 변경됨")
                                 st.rerun()
-                    with col3:
+                    with col_delete:
                         if st.button("삭제", key=f"delete_zero_input_{i}"):
                             st.session_state.revenue_sources['zero_rated'].remove(source)
                             st.success(f"'{source}' 삭제됨")
@@ -366,10 +366,10 @@ def show_data_input():
         if st.session_state.get('show_expense_management', False):
             with st.expander("🔧 매입 항목 관리", expanded=True):
                 # 새 매입 항목 추가
-                col1, col2 = st.columns([3, 1])
-                with col1:
+                col_input, col_add = st.columns([3, 1])
+                with col_input:
                     new_expense_item = st.text_input("새 매입 항목 추가", key="new_expense_input")
-                with col2:
+                with col_add:
                     if st.button("추가", key="add_expense_input"):
                         if new_expense_item and new_expense_item not in st.session_state.expense_items:
                             st.session_state.expense_items.append(new_expense_item)
@@ -378,16 +378,16 @@ def show_data_input():
                 
                 # 기존 매입 항목 수정/삭제
                 for i, item in enumerate(st.session_state.expense_items[:]):
-                    col1, col2, col3 = st.columns([3, 1, 1])
-                    with col1:
+                    col_edit, col_update, col_delete = st.columns([3, 1, 1])
+                    with col_edit:
                         new_name = st.text_input("", value=item, key=f"edit_expense_input_{i}")
-                    with col2:
+                    with col_update:
                         if st.button("수정", key=f"update_expense_input_{i}"):
                             if new_name != item:
                                 st.session_state.expense_items[i] = new_name
                                 st.success(f"'{item}' → '{new_name}' 변경됨")
                                 st.rerun()
-                    with col3:
+                    with col_delete:
                         if st.button("삭제", key=f"delete_expense_input_{i}"):
                             st.session_state.expense_items.remove(item)
                             st.success(f"'{item}' 삭제됨")
