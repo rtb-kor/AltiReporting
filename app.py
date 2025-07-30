@@ -451,13 +451,11 @@ def show_monthly_report():
     st.header("월말 보고서")
     
     # 년월 선택 (컴팩트)
-    col1, col2, col3 = st.columns([2, 2, 4])
+    col1, col2 = st.columns([3, 3])
     with col1:
         year = st.selectbox("년도", list(range(2020, 2030)), index=5, key="monthly_year")
     with col2:
         month = st.selectbox("월", list(range(1, 13)), index=6, key="monthly_month")
-    with col3:
-        st.markdown(f"<div style='padding: 0.5rem; background: #f8f9fa; border-radius: 6px; margin-top: 1.5rem;'><strong>선택: {year}년 {month}월</strong></div>", unsafe_allow_html=True)
     
     month_key = f"{year}-{month:02d}"
     data = st.session_state.data_manager.get_month_data(month_key)
@@ -654,13 +652,11 @@ def show_monthly_report():
 def show_semi_annual_report():
     st.header("반기 보고서")
     
-    col1, col2, col3 = st.columns([2, 3, 3])
+    col1, col2 = st.columns([3, 4])
     with col1:
         year = st.selectbox("년도", list(range(2020, 2030)), index=5, key="semi_year")
     with col2:
         period = st.selectbox("기간", ["상반기 (1-6월)", "하반기 (7-12월)"], key="semi_period")
-    with col3:
-        st.markdown(f"<div style='padding: 0.5rem; background: #f3f4f6; border-radius: 6px; margin-top: 1.5rem;'><strong>선택: {year}년 {period.split()[0]}</strong></div>", unsafe_allow_html=True)
     
     # 기간 설정
     if "상반기" in period:
@@ -780,11 +776,7 @@ def show_semi_annual_report():
 def show_annual_report():
     st.header("연말 보고서")
     
-    col1, col2 = st.columns([2, 6])
-    with col1:
-        year = st.selectbox("년도", list(range(2020, 2030)), index=5, key="annual_year")
-    with col2:
-        st.markdown(f"<div style='padding: 0.5rem; background: #f3f4f6; border-radius: 6px; margin-top: 1.5rem;'><strong>선택: {year}년 연말 보고서</strong></div>", unsafe_allow_html=True)
+    year = st.selectbox("년도", list(range(2020, 2030)), index=5, key="annual_year")
     
     # 연간 데이터 수집
     all_data = st.session_state.data_manager.get_all_data()
