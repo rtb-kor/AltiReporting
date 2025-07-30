@@ -554,8 +554,8 @@ def show_monthly_report():
         total_expense = sum(data['매입'].values())
         st.markdown(f'''
         <div style="background: white; border: 2px solid #e9ecef; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
-            <h3 style="margin: 0; color: blue; text-align: center; font-size: 1.4rem; font-weight: 700;">
-                매입 총계: {total_expense:,}원
+            <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
+                매입 총계: <span style="color: blue;">{total_expense:,}원</span>
             </h3>
         </div>
         ''', unsafe_allow_html=True)
