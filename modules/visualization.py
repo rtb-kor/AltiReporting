@@ -6,10 +6,10 @@ from typing import Dict, Any
 
 class VisualizationManager:
     def __init__(self):
-        # RTB 브랜드 색상 팔레트 (따뜻한 버건디 기반)
+        # RTB 브랜드 색상 팔레트 (더 생동감 있는 버건디 기반)
         self.color_palette = [
-            '#9C2A4A',  # RTB 따뜻한 버건디
-            '#B73B5A',  # 밝은 따뜻한 버건디
+            '#A82D4E',  # RTB 생동감 있는 버건디
+            '#C23E60',  # 밝은 생동감 있는 버건디
             '#D14866',  # 부드러운 로즈
             '#6B7280',  # RTB 그레이
             '#374151',  # 진한 그레이
@@ -65,7 +65,7 @@ class VisualizationManager:
                 'text': '매출처별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#9C2A4A'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#A82D4E'}
             },
             showlegend=True,
             height=400,
@@ -122,7 +122,7 @@ class VisualizationManager:
                 'text': '매입 항목별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#9C2A4A'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#A82D4E'}
             },
             showlegend=True,
             height=400,
@@ -458,7 +458,7 @@ class VisualizationManager:
         values = list(filtered_data.values())
         
         # 매출 유형별 색상 - 매입분포와 조화로운 3색상
-        colors = ['#9C2A4A', '#B73B5A', '#D14866']  # RTB 버건디 계열 3단계
+        colors = ['#A82D4E', '#C23E60', '#D14866']  # RTB 생동감 있는 버건디 계열 3단계
         
         fig = go.Figure(data=[go.Pie(
             labels=labels,
@@ -479,7 +479,7 @@ class VisualizationManager:
                 'text': '매출 구성 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#9C2A4A'}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#A82D4E'}
             },
             showlegend=True,
             height=400,

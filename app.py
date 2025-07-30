@@ -21,8 +21,8 @@ st.markdown("""
 <style>
     /* RTB 브랜드 색상 */
     :root {
-        --rtb-burgundy: #9C2A4A;
-        --rtb-burgundy-light: #B73B5A;
+        --rtb-burgundy: #A82D4E;
+        --rtb-burgundy-light: #C23E60;
         --rtb-gray: #6B7280;
         --rtb-light-gray: #F3F4F6;
         --rtb-dark-gray: #374151;
