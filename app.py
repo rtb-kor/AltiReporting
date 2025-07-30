@@ -121,6 +121,7 @@ def show_dashboard():
     
     if not data:
         st.warning("입력된 데이터가 없습니다. '데이터 입력' 메뉴에서 데이터를 입력해주세요.")
+        st.info("💡 **자동 집계 시스템**: 월별 데이터를 입력하면 반기/연말 보고서에 자동으로 반영됩니다.")
         return
     
     # 기본 통계
@@ -159,6 +160,39 @@ def show_dashboard():
         if latest_month and data[latest_month].get('매입'):
             expense_pie = st.session_state.viz_manager.create_expense_pie_chart(data[latest_month]['매입'])
             st.plotly_chart(expense_pie, use_container_width=True)
+    
+    # 데이터 입력 현황 표시
+    st.markdown("---")
+    st.subheader("📅 데이터 입력 현황")
+    
+    # 현재 연도 기준으로 월별 입력 현황 표시
+    current_year = datetime.now().year
+    months_with_data = []
+    months_without_data = []
+    
+    for month in range(1, 13):
+        month_key = f"{current_year}-{month:02d}"
+        if month_key in data:
+            months_with_data.append(f"{month}월")
+        else:
+            months_without_data.append(f"{month}월")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if months_with_data:
+            st.success(f"**입력 완료 ({len(months_with_data)}개월)**: {', '.join(months_with_data)}")
+        else:
+            st.info("입력된 데이터가 없습니다.")
+    
+    with col2:
+        if months_without_data:
+            st.warning(f"**입력 필요 ({len(months_without_data)}개월)**: {', '.join(months_without_data)}")
+        else:
+            st.success("모든 월 데이터 입력 완료!")
+    
+    if months_with_data:
+        st.info(f"💡 **자동 집계**: 입력된 {len(months_with_data)}개월 데이터가 반기/연말 보고서에 자동 반영됩니다.")
 
 def show_data_input():
     st.header("📝 데이터 입력")
@@ -321,7 +355,15 @@ def show_data_input():
         }
         
         st.session_state.data_manager.save_month_data(month_key, month_data)
-        st.success(f"✅ {year}년 {month}월 데이터가 저장되었습니다.")
+        
+        # 성공 메시지와 자동 반영 안내
+        st.success(f"✅ {year}년 {month}월 데이터가 저장되었습니다!")
+        st.info("""
+        📊 **자동 집계 시스템 안내**
+        - 반기 보고서: 저장한 월별 데이터가 자동으로 상/하반기 집계에 반영됩니다
+        - 연말 보고서: 저장한 월별 데이터가 자동으로 연간 집계에 반영됩니다
+        - 새로 추가한 매출처/매입처도 자동으로 보고서에 포함됩니다
+        """)
         st.rerun()
 
 def show_monthly_report():
@@ -491,6 +533,7 @@ def show_semi_annual_report():
     
     if not period_data:
         st.warning(f"{year}년 {period_name} 데이터가 없습니다.")
+        st.info("💡 **데이터 입력 안내**: '데이터 입력' 메뉴에서 월별 데이터를 입력하면 자동으로 반기 보고서에 반영됩니다.")
         return
     
     # 반기 집계
@@ -583,6 +626,7 @@ def show_annual_report():
     
     if not annual_data:
         st.warning(f"{year}년 데이터가 없습니다.")
+        st.info("💡 **데이터 입력 안내**: '데이터 입력' 메뉴에서 월별 데이터를 입력하면 자동으로 연말 보고서에 반영됩니다.")
         return
     
     # 연간 집계

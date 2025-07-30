@@ -52,30 +52,39 @@ class DataManager:
             self.save_data()
     
     def aggregate_period_data(self, period_data: Dict[str, Any]) -> Dict[str, Any]:
-        """기간별 데이터 집계"""
+        """기간별 데이터 자동 집계 - 입력된 모든 매출처/매입처를 동적으로 집계"""
         aggregated = {
             '매출': {},
             '매입': {}
         }
         
-        # 매출처별 집계 (전자세금계산서매출 + 영세매출 + 기타)
-        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
-        zero_rated_sources = ["Everllence LEO", "Mitsui"]
-        other_sources = ["기타"]
-        revenue_sources = electronic_tax_sources + [s for s in zero_rated_sources if s not in electronic_tax_sources] + other_sources
-        for source in revenue_sources:
+        # 모든 매출처를 동적으로 수집
+        all_revenue_sources = set()
+        for month_data in period_data.values():
+            if '매출' in month_data:
+                all_revenue_sources.update(month_data['매출'].keys())
+        
+        # 매출처별 집계
+        for source in all_revenue_sources:
             total = 0
             for month_data in period_data.values():
                 total += month_data.get('매출', {}).get(source, 0)
-            aggregated['매출'][source] = total
+            if total > 0:  # 0보다 큰 항목만 포함
+                aggregated['매출'][source] = total
+        
+        # 모든 매입 항목을 동적으로 수집
+        all_expense_items = set()
+        for month_data in period_data.values():
+            if '매입' in month_data:
+                all_expense_items.update(month_data['매입'].keys())
         
         # 매입 항목별 집계
-        expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
-        for item in expense_items:
+        for item in all_expense_items:
             total = 0
             for month_data in period_data.values():
                 total += month_data.get('매입', {}).get(item, 0)
-            aggregated['매입'][item] = total
+            if total > 0:  # 0보다 큰 항목만 포함
+                aggregated['매입'][item] = total
         
         return aggregated
     
