@@ -279,17 +279,17 @@ def show_data_input():
         st.session_state.expense_items = ["급여", "수당", "법인카드 사용액", "전자세금계산서", "세금", "이자", "퇴직금", "기타"]
     
     # 안내 메시지
-    st.info("💡 **매출처/매입처 수정**: '설정' 메뉴에서 매출처와 매입처를 추가/삭제할 수 있습니다.")
+    st.info("**매출처/매입처 수정**: '설정' 메뉴에서 매출처와 매입처를 추가/삭제할 수 있습니다.")
     
     # 매출/매입 입력
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("💰 매출")
+        st.subheader("매출")
         revenue_data = {}
         
         # 전자세금계산서매출
-        st.markdown("**📋 전자세금계산서매출**")
+        st.markdown("**전자세금계산서매출**")
         electronic_total = 0
         for source in st.session_state.revenue_sources['electronic_tax']:
             current_value = existing_data.get('매출', {}).get(source, 0)
@@ -299,7 +299,7 @@ def show_data_input():
         st.info(f"소계: {electronic_total:,}원")
         
         # 영세매출
-        st.markdown("**🌐 영세매출**")
+        st.markdown("**영세매출**")
         zero_total = 0
         for source in st.session_state.revenue_sources['zero_rated']:
             current_value = existing_data.get('매출', {}).get(source, 0)
@@ -312,7 +312,7 @@ def show_data_input():
         st.info(f"소계: {zero_total:,}원")
         
         # 기타 매출
-        st.markdown("**📦 기타 매출**")
+        st.markdown("**기타 매출**")
         current_other = existing_data.get('매출', {}).get("기타", 0)
         other_revenue = st.number_input("기타", value=current_other, min_value=0, step=1000000, key="other_revenue")
         revenue_data["기타"] = other_revenue
@@ -321,7 +321,7 @@ def show_data_input():
         st.success(f"**총 매출: {total_revenue:,}원**")
     
     with col2:
-        st.subheader("💸 매입")
+        st.subheader("매입")
         expense_data = {}
         
         for item in st.session_state.expense_items:
@@ -336,7 +336,7 @@ def show_data_input():
     
     # 저장 버튼
     st.markdown("---")
-    if st.button("💾 데이터 저장", type="primary", use_container_width=True):
+    if st.button("데이터 저장", type="primary", use_container_width=True):
         month_data = {
             "매출": revenue_data,
             "매입": expense_data,
@@ -393,10 +393,10 @@ def show_monthly_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("💰 매출 현황")
+        st.subheader("매출 현황")
         
         # 전자세금계산서매출
-        st.markdown("**📋 전자세금계산서매출**")
+        st.markdown("**전자세금계산서매출**")
         electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
         electronic_data = []
         electronic_total = 0
@@ -411,7 +411,7 @@ def show_monthly_report():
         st.markdown(f'<div class="highlight-number">소계: {electronic_total:,}원</div>', unsafe_allow_html=True)
         
         # 영세매출
-        st.markdown("**🌐 영세매출**")
+        st.markdown("**영세매출**")
         zero_rated_sources = ["Everllence LEO", "Mitsui"]
         zero_data = []
         zero_total = 0
@@ -426,24 +426,24 @@ def show_monthly_report():
         st.markdown(f'<div class="highlight-number">소계: {zero_total:,}원</div>', unsafe_allow_html=True)
         
         # 기타 매출
-        st.markdown("**📦 기타 매출**")
+        st.markdown("**기타 매출**")
         other_amount = data['매출'].get("기타", 0)
         other_df = pd.DataFrame([["기타", f"{other_amount:,}"]])
         other_df.columns = ['매출처', '금액(원)']
         st.dataframe(other_df, hide_index=True, use_container_width=True)
         
         total_revenue = sum(data['매출'].values())
-        st.markdown(f'<div class="metric-card"><h3 style="color: #9C2A4A; margin: 0;">매출 총계: {total_revenue:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: red; margin: 0;">매출 총계: {total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     
     with col2:
-        st.subheader("💸 매입 현황")
+        st.subheader("매입 현황")
         expense_df = pd.DataFrame(list(data['매입'].items()))
         expense_df.columns = ['항목', '금액(원)']
         expense_df['금액(원)'] = expense_df['금액(원)'].apply(lambda x: f"{x:,}")
         st.dataframe(expense_df, hide_index=True, use_container_width=True)
         
         total_expense = sum(data['매입'].values())
-        st.markdown(f'<div class="metric-card"><h3 style="color: #9C2A4A; margin: 0;">매입 총계: {total_expense:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: blue; margin: 0;">매입 총계: {total_expense:,}원</h3></div>', unsafe_allow_html=True)
     
     # 순이익 계산
     net_profit = total_revenue - total_expense
@@ -458,12 +458,12 @@ def show_monthly_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("📊 매출처별 분포")
+        st.subheader("매출처별 분포")
         pie_chart = st.session_state.viz_manager.create_revenue_pie_chart(data['매출'])
         st.plotly_chart(pie_chart, use_container_width=True)
     
     with col2:
-        st.subheader("📊 매입 항목별 분포")
+        st.subheader("매입 항목별 분포")
         expense_pie = st.session_state.viz_manager.create_expense_pie_chart(data['매입'])
         st.plotly_chart(expense_pie, use_container_width=True)
     
@@ -472,29 +472,29 @@ def show_monthly_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("📄 PDF 다운로드"):
+        if st.button("PDF 다운로드"):
             pdf_file = st.session_state.export_manager.generate_pdf_report(report, f"RTB_{year}년_{month}월_월말보고서")
             with open(pdf_file, "rb") as file:
                 st.download_button(
-                    label="📥 PDF 파일 다운로드",
+                    label="PDF 파일 다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_{month}월_월말보고서.pdf",
                     mime="application/pdf"
                 )
     
     with col2:
-        if st.button("📊 Excel 다운로드"):
+        if st.button("Excel 다운로드"):
             excel_file = st.session_state.export_manager.generate_excel_report(data, f"RTB_{year}년_{month}월_월말보고서")
             with open(excel_file, "rb") as file:
                 st.download_button(
-                    label="📥 Excel 파일 다운로드",
+                    label="Excel 파일 다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_{month}월_월말보고서.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 )
 
 def show_semi_annual_report():
-    st.header("📊 반기 보고서")
+    st.header("반기 보고서")
     
     col1, col2 = st.columns(2)
     with col1:
@@ -521,7 +521,7 @@ def show_semi_annual_report():
     
     if not period_data:
         st.warning(f"{year}년 {period_name} 데이터가 없습니다.")
-        st.info("💡 **데이터 입력 안내**: '데이터 입력' 메뉴에서 월별 데이터를 입력하면 자동으로 반기 보고서에 반영됩니다.")
+        st.info("**데이터 입력 안내**: '데이터 입력' 메뉴에서 월별 데이터를 입력하면 자동으로 반기 보고서에 반영됩니다.")
         return
     
     # 반기 집계
@@ -549,9 +549,9 @@ def show_semi_annual_report():
     net_profit = total_revenue - total_expense
     
     with col1:
-        st.markdown(f'<div class="metric-card"><h3 style="color: #9C2A4A; margin: 0;">{period_name} 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: red; margin: 0;">{period_name} 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     with col2:
-        st.markdown(f'<div class="metric-card"><h3 style="color: #9C2A4A; margin: 0;">{period_name} 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: blue; margin: 0;">{period_name} 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     with col3:
         st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">{period_name} 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
     
@@ -559,14 +559,14 @@ def show_semi_annual_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("💰 매출처별 집계")
+        st.subheader("매출처별 집계")
         revenue_df = pd.DataFrame(list(semi_annual_summary['매출'].items()))
         revenue_df.columns = ['매출처', '금액(원)']
         revenue_df['금액(원)'] = revenue_df['금액(원)'].apply(lambda x: f"{x:,}")
         st.dataframe(revenue_df, hide_index=True, use_container_width=True)
     
     with col2:
-        st.subheader("💸 매입 항목별 집계")
+        st.subheader("매입 항목별 집계")
         expense_df = pd.DataFrame(list(semi_annual_summary['매입'].items()))
         expense_df.columns = ['항목', '금액(원)']
         expense_df['금액(원)'] = expense_df['금액(원)'].apply(lambda x: f"{x:,}")
@@ -577,7 +577,7 @@ def show_semi_annual_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("📄 PDF 다운로드", key="semi_pdf"):
+        if st.button("PDF 다운로드", key="semi_pdf"):
             report_data = {
                 'period': f"{year}년 {period_name}",
                 'summary': semi_annual_summary,
@@ -586,7 +586,7 @@ def show_semi_annual_report():
             pdf_file = st.session_state.export_manager.generate_pdf_report(report_data, f"RTB_{year}년_{period_name}_보고서")
             with open(pdf_file, "rb") as file:
                 st.download_button(
-                    label="📥 PDF 파일 다운로드",
+                    label="PDF 파일 다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_{period_name}_보고서.pdf",
                     mime="application/pdf",
@@ -594,7 +594,7 @@ def show_semi_annual_report():
                 )
 
 def show_annual_report():
-    st.header("📋 연말 보고서")
+    st.header("연말 보고서")
     
     year = st.selectbox("년도", list(range(2020, 2030)), index=5, key="annual_year")
     
@@ -609,7 +609,7 @@ def show_annual_report():
     
     if not annual_data:
         st.warning(f"{year}년 데이터가 없습니다.")
-        st.info("💡 **데이터 입력 안내**: '데이터 입력' 메뉴에서 월별 데이터를 입력하면 자동으로 연말 보고서에 반영됩니다.")
+        st.info("**데이터 입력 안내**: '데이터 입력' 메뉴에서 월별 데이터를 입력하면 자동으로 연말 보고서에 반영됩니다.")
         return
     
     # 연간 집계
@@ -639,10 +639,10 @@ def show_annual_report():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown(f'<div class="metric-card"><h3 style="color: #9C2A4A; margin: 0;">연간 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: red; margin: 0;">연간 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown(f'<div class="metric-card"><h3 style="color: #9C2A4A; margin: 0;">연간 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="metric-card"><h3 style="color: blue; margin: 0;">연간 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     
     with col3:
         st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #9C2A4A, #B73B5A); color: white;"><h3 style="color: white !important; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">연간 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
@@ -650,12 +650,12 @@ def show_annual_report():
     st.markdown("---")
     
     # 매출/매입 비교 분석
-    st.subheader("📊 매출 vs 매입 비교")
+    st.subheader("매출 vs 매입 비교")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("#### 💰 매출 세부 내역")
+        st.markdown("#### 매출 세부 내역")
         
         # 전자세금계산서매출 소계
         electronic_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
@@ -686,7 +686,7 @@ def show_annual_report():
         st.plotly_chart(revenue_pie, use_container_width=True)
     
     with col2:
-        st.markdown("#### 💸 매입 세부 내역")
+        st.markdown("#### 매입 세부 내역")
         
         # 매입 구성 표
         expense_df = pd.DataFrame(list(annual_summary['매입'].items()))
@@ -702,7 +702,7 @@ def show_annual_report():
     st.markdown("---")
     
     # 매출 vs 매입 비교 차트
-    st.subheader("📈 매출 vs 매입 총액 비교")
+    st.subheader("매출 vs 매입 총액 비교")
     comparison_chart = st.session_state.viz_manager.create_revenue_expense_comparison_chart(total_revenue, total_expense, net_profit)
     st.plotly_chart(comparison_chart, use_container_width=True)
     
@@ -711,7 +711,7 @@ def show_annual_report():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("📄 PDF 다운로드", key="annual_pdf"):
+        if st.button("PDF 다운로드", key="annual_pdf"):
             report_data = {
                 'period': f"{year}년",
                 'summary': annual_summary,
@@ -723,7 +723,7 @@ def show_annual_report():
             pdf_file = st.session_state.export_manager.generate_pdf_report(report_data, f"RTB_{year}년_연말보고서")
             with open(pdf_file, "rb") as file:
                 st.download_button(
-                    label="📥 PDF 파일 다운로드",
+                    label="PDF 파일 다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_연말보고서.pdf",
                     mime="application/pdf",
@@ -731,11 +731,11 @@ def show_annual_report():
                 )
     
     with col2:
-        if st.button("📊 Excel 다운로드", key="annual_excel"):
+        if st.button("Excel 다운로드", key="annual_excel"):
             excel_file = st.session_state.export_manager.generate_excel_report(annual_summary, f"RTB_{year}년_연말보고서")
             with open(excel_file, "rb") as file:
                 st.download_button(
-                    label="📥 Excel 파일 다운로드",
+                    label="Excel 파일 다운로드",
                     data=file.read(),
                     file_name=f"RTB_{year}년_연말보고서.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -743,16 +743,16 @@ def show_annual_report():
                 )
 
 def show_settings():
-    st.header("⚙️ 시스템 설정")
+    st.header("시스템 설정")
     
     # 탭으로 설정 메뉴 구분
-    tab1, tab2, tab3 = st.tabs(["💼 매출처/매입처 관리", "📊 데이터 관리", "ℹ️ 시스템 정보"])
+    tab1, tab2, tab3 = st.tabs(["매출처/매입처 관리", "데이터 관리", "시스템 정보"])
     
     with tab1:
-        st.subheader("💼 매출처 및 매입처 관리")
+        st.subheader("매출처 및 매입처 관리")
         
         # 매출처 관리
-        st.markdown("#### 📈 매출처 관리")
+        st.markdown("#### 매출처 관리")
         
         # 세션 상태에 매출처 정보가 없으면 기본값 설정
         if 'revenue_sources' not in st.session_state:
@@ -763,7 +763,7 @@ def show_settings():
             }
         
         # 전자세금계산서매출
-        st.markdown("**🧾 전자세금계산서매출**")
+        st.markdown("**전자세금계산서매출**")
         electronic_tax_sources = st.session_state.revenue_sources['electronic_tax']
         
         col1, col2 = st.columns([3, 1])
@@ -796,7 +796,7 @@ def show_settings():
         st.markdown("---")
         
         # 영세매출
-        st.markdown("**🌐 영세매출**")
+        st.markdown("**영세매출**")
         zero_rated_sources = st.session_state.revenue_sources['zero_rated']
         
         col1, col2 = st.columns([3, 1])
@@ -829,7 +829,7 @@ def show_settings():
         st.markdown("---")
         
         # 매입처 관리
-        st.markdown("#### 📉 매입 항목 관리")
+        st.markdown("#### 매입 항목 관리")
         
         # 세션 상태에 매입 항목이 없으면 기본값 설정
         if 'expense_items' not in st.session_state:
