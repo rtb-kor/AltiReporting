@@ -6,9 +6,18 @@ from typing import Dict, Any
 
 class VisualizationManager:
     def __init__(self):
+        # RTB 브랜드 색상 팔레트 (버건디와 그레이 기반)
         self.color_palette = [
-            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-            '#DDA0DD', '#FFB347', '#87CEEB', '#F0E68C', '#FFE4E1'
+            '#8B1538',  # RTB 버건디
+            '#A01B47',  # 밝은 버건디
+            '#6B7280',  # RTB 그레이
+            '#374151',  # 진한 그레이
+            '#B91C1C',  # 레드
+            '#DC2626',  # 밝은 레드
+            '#9CA3AF',  # 밝은 그레이
+            '#4B5563',  # 중간 그레이
+            '#F3F4F6',  # 연한 그레이
+            '#E5E7EB'   # 매우 연한 그레이
         ]
     
     def create_revenue_pie_chart(self, revenue_data: Dict[str, int]) -> go.Figure:
@@ -57,12 +66,14 @@ class VisualizationManager:
                 'text': '매출처별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 18}
+                'font': {'size': 18, 'family': 'Georgia', 'color': '#8B1538'}
             },
             showlegend=True,
             height=400,
             margin=dict(t=50, b=50, l=50, r=50),
-            font=dict(family="Arial", size=12)
+            font=dict(family="Georgia", size=12, color='#374151'),
+            plot_bgcolor='white',
+            paper_bgcolor='white'
         )
         
         return fig
@@ -113,12 +124,14 @@ class VisualizationManager:
                 'text': '매입 항목별 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 18}
+                'font': {'size': 18, 'family': 'Georgia', 'color': '#8B1538'}
             },
             showlegend=True,
             height=400,
             margin=dict(t=50, b=50, l=50, r=50),
-            font=dict(family="Arial", size=12)
+            font=dict(family="Georgia", size=12, color='#374151'),
+            plot_bgcolor='white',
+            paper_bgcolor='white'
         )
         
         return fig

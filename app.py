@@ -16,6 +16,129 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# RTB 브랜드 스타일링
+st.markdown("""
+<style>
+    /* RTB 브랜드 색상 */
+    :root {
+        --rtb-burgundy: #8B1538;
+        --rtb-gray: #6B7280;
+        --rtb-light-gray: #F3F4F6;
+        --rtb-dark-gray: #374151;
+    }
+    
+    /* 전체 앱 스타일 */
+    .main .block-container {
+        padding-top: 2rem;
+        font-family: 'Georgia', 'Times New Roman', serif;
+    }
+    
+    /* 제목 스타일 */
+    h1 {
+        color: var(--rtb-burgundy) !important;
+        font-family: 'Georgia', serif !important;
+        font-weight: 700 !important;
+        border-bottom: 3px solid var(--rtb-burgundy);
+        padding-bottom: 0.5rem;
+    }
+    
+    /* 서브헤더 스타일 */
+    h2, h3 {
+        color: var(--rtb-dark-gray) !important;
+        font-family: 'Georgia', serif !important;
+        font-weight: 600 !important;
+    }
+    
+    /* 보고서 헤더 박스 */
+    .report-header {
+        background: linear-gradient(135deg, var(--rtb-burgundy), #A01B47);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* 메트릭 카드 스타일 */
+    .metric-card {
+        background: white;
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1rem;
+    }
+    
+    /* 버튼 스타일 */
+    .stButton > button {
+        background-color: var(--rtb-burgundy) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 6px !important;
+        font-family: 'Georgia', serif !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: #A01B47 !important;
+        box-shadow: 0 4px 8px rgba(139, 21, 56, 0.3) !important;
+    }
+    
+    /* 사이드바 스타일 */
+    .css-1d391kg {
+        background-color: var(--rtb-light-gray) !important;
+    }
+    
+    /* 성공/정보 메시지 스타일 */
+    .stSuccess {
+        background-color: #ECFDF5 !important;
+        border-left: 4px solid #10B981 !important;
+        color: #065F46 !important;
+    }
+    
+    .stInfo {
+        background-color: #EFF6FF !important;
+        border-left: 4px solid var(--rtb-burgundy) !important;
+        color: var(--rtb-dark-gray) !important;
+    }
+    
+    /* 테이블 스타일 */
+    .dataframe {
+        font-family: 'Georgia', serif !important;
+        border-collapse: collapse !important;
+    }
+    
+    .dataframe th {
+        background-color: var(--rtb-burgundy) !important;
+        color: white !important;
+        font-weight: 600 !important;
+        padding: 1rem !important;
+    }
+    
+    .dataframe td {
+        padding: 0.75rem !important;
+        border-bottom: 1px solid #E5E7EB !important;
+    }
+    
+    /* 숫자 강조 스타일 */
+    .highlight-number {
+        font-family: 'Georgia', serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--rtb-burgundy);
+    }
+    
+    /* 구분선 스타일 */
+    hr {
+        border: none !important;
+        height: 2px !important;
+        background: linear-gradient(90deg, var(--rtb-burgundy), var(--rtb-gray)) !important;
+        margin: 2rem 0 !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # 세션 상태 초기화
 if 'data_manager' not in st.session_state:
     st.session_state.data_manager = DataManager()
@@ -321,21 +444,16 @@ def show_monthly_report():
     st.markdown("---")
     
     # 보고서 헤더
-    header_col1, header_col2 = st.columns([1, 4])
-    
-    with header_col1:
-        try:
-            st.image("assets/rtb_logo.png", width=80)
-        except:
-            st.write("🏢")
-    
-    with header_col2:
-        st.markdown(f"""
-        ## RTB {year}년 {month}월 월말 보고서
-        **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
-        **보고기간:** {year}년 {month}월 1일 ~ {year}년 {month}월 말일  
-        **작성자:** RTB 회계팀
-        """)
+    st.markdown(f"""
+    <div class="report-header">
+        <h2 style="color: white; margin: 0; font-size: 2rem;">RTB {year}년 {month}월 월말보고서</h2>
+        <div style="margin-top: 1rem; font-size: 1rem; opacity: 0.9;">
+            <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong>보고기간:</strong> {year}년 {month}월 &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong>작성자:</strong> RTB 회계팀
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     # 요약 테이블
     col1, col2 = st.columns(2)
@@ -356,7 +474,7 @@ def show_monthly_report():
         electronic_df = pd.DataFrame(electronic_data)
         electronic_df.columns = ['매출처', '금액(원)']
         st.dataframe(electronic_df, hide_index=True, use_container_width=True)
-        st.info(f"전자세금계산서매출 소계: {electronic_total:,}원")
+        st.markdown(f'<div class="highlight-number">소계: {electronic_total:,}원</div>', unsafe_allow_html=True)
         
         # 영세매출
         st.markdown("**🌐 영세매출**")
@@ -371,7 +489,7 @@ def show_monthly_report():
         zero_df = pd.DataFrame(zero_data)
         zero_df.columns = ['매출처', '금액(원)']
         st.dataframe(zero_df, hide_index=True, use_container_width=True)
-        st.info(f"영세매출 소계: {zero_total:,}원")
+        st.markdown(f'<div class="highlight-number">소계: {zero_total:,}원</div>', unsafe_allow_html=True)
         
         # 기타 매출
         st.markdown("**📦 기타 매출**")
@@ -381,7 +499,7 @@ def show_monthly_report():
         st.dataframe(other_df, hide_index=True, use_container_width=True)
         
         total_revenue = sum(data['매출'].values())
-        st.success(f"**매출 총계: {total_revenue:,}원**")
+        st.markdown(f'<div class="metric-card"><h3 style="color: #8B1538; margin: 0;">매출 총계: {total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     
     with col2:
         st.subheader("💸 매입 현황")
@@ -391,12 +509,16 @@ def show_monthly_report():
         st.dataframe(expense_df, hide_index=True, use_container_width=True)
         
         total_expense = sum(data['매입'].values())
-        st.metric("매입 총계", f"{total_expense:,}원")
+        st.markdown(f'<div class="metric-card"><h3 style="color: #8B1538; margin: 0;">매입 총계: {total_expense:,}원</h3></div>', unsafe_allow_html=True)
     
     # 순이익 계산
     net_profit = total_revenue - total_expense
     st.markdown("---")
-    st.metric("🎯 순이익", f"{net_profit:,}원", delta=f"{net_profit}")
+    st.markdown(f'''
+    <div class="metric-card" style="background: linear-gradient(135deg, #8B1538, #A01B47); color: white; text-align: center;">
+        <h2 style="color: white; margin: 0; font-size: 2rem;">순이익: {net_profit:,}원</h2>
+    </div>
+    ''', unsafe_allow_html=True)
     
     # 시각화
     col1, col2 = st.columns(2)
@@ -474,21 +596,16 @@ def show_semi_annual_report():
     st.markdown("---")
     
     # 보고서 헤더
-    header_col1, header_col2 = st.columns([1, 4])
-    
-    with header_col1:
-        try:
-            st.image("assets/rtb_logo.png", width=80)
-        except:
-            st.write("🏢")
-    
-    with header_col2:
-        st.markdown(f"""
-        ## RTB {year}년 {period_name} 보고서
-        **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
-        **보고기간:** {year}년 {months[0]}월 ~ {months[-1]}월  
-        **작성자:** RTB 회계팀
-        """)
+    st.markdown(f"""
+    <div class="report-header">
+        <h2 style="color: white; margin: 0; font-size: 2rem;">RTB {year}년 {period_name} 보고서</h2>
+        <div style="margin-top: 1rem; font-size: 1rem; opacity: 0.9;">
+            <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong>보고기간:</strong> {year}년 {months[0]}월 ~ {months[-1]}월 &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong>작성자:</strong> RTB 회계팀
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     # 요약 정보
     col1, col2, col3 = st.columns(3)
@@ -498,11 +615,11 @@ def show_semi_annual_report():
     net_profit = total_revenue - total_expense
     
     with col1:
-        st.metric(f"{period_name} 총 매출", f"{total_revenue:,}원")
+        st.markdown(f'<div class="metric-card"><h3 style="color: #8B1538; margin: 0;">{period_name} 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     with col2:
-        st.metric(f"{period_name} 총 매입", f"{total_expense:,}원")
+        st.markdown(f'<div class="metric-card"><h3 style="color: #8B1538; margin: 0;">{period_name} 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     with col3:
-        st.metric(f"{period_name} 순이익", f"{net_profit:,}원")
+        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #8B1538, #A01B47); color: white;"><h3 style="color: white; margin: 0;">{period_name} 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
     
     # 상세 분석
     col1, col2 = st.columns(2)
@@ -567,21 +684,16 @@ def show_annual_report():
     st.markdown("---")
     
     # 보고서 헤더
-    header_col1, header_col2 = st.columns([1, 4])
-    
-    with header_col1:
-        try:
-            st.image("assets/rtb_logo.png", width=100)
-        except:
-            st.write("🏢")
-    
-    with header_col2:
-        st.markdown(f"""
-        # RTB {year}년 연말 보고서
-        **작성일:** {datetime.now().strftime('%Y년 %m월 %d일')}  
-        **보고기간:** {year}년 전체  
-        **작성:** RTB 회계팀
-        """)
+    st.markdown(f"""
+    <div class="report-header">
+        <h2 style="color: white; margin: 0; font-size: 2rem;">RTB {year}년 연말 보고서</h2>
+        <div style="margin-top: 1rem; font-size: 1rem; opacity: 0.9;">
+            <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong>보고기간:</strong> {year}년 전체 &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong>작성자:</strong> RTB 회계팀
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("---")
     
@@ -593,26 +705,13 @@ def show_annual_report():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric(
-            label="💰 연간 총 매출",
-            value=f"{total_revenue:,}원",
-            delta=None
-        )
+        st.markdown(f'<div class="metric-card"><h3 style="color: #8B1538; margin: 0;">연간 총 매출<br>{total_revenue:,}원</h3></div>', unsafe_allow_html=True)
     
     with col2:
-        st.metric(
-            label="💸 연간 총 매입", 
-            value=f"{total_expense:,}원",
-            delta=None
-        )
+        st.markdown(f'<div class="metric-card"><h3 style="color: #8B1538; margin: 0;">연간 총 매입<br>{total_expense:,}원</h3></div>', unsafe_allow_html=True)
     
     with col3:
-        profit_color = "normal" if net_profit >= 0 else "inverse"
-        st.metric(
-            label="🎯 연간 순이익",
-            value=f"{net_profit:,}원",
-            delta=f"{net_profit:,}원" if net_profit != 0 else None
-        )
+        st.markdown(f'<div class="metric-card" style="background: linear-gradient(135deg, #8B1538, #A01B47); color: white;"><h3 style="color: white; margin: 0;">연간 순이익<br>{net_profit:,}원</h3></div>', unsafe_allow_html=True)
     
     st.markdown("---")
     
