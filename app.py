@@ -10,7 +10,7 @@ from modules.export_utils import ExportManager
 
 # 페이지 설정
 st.set_page_config(
-    page_title="RTB 회계 통합 보고서 시스템",
+    page_title="RTB 회계 통합 보고서",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -274,7 +274,7 @@ def main():
             st.write("🏢")
     
     with col2:
-        st.title("RTB 회계 통합 보고서 시스템")
+        st.title("RTB 회계 통합 보고서")
         st.caption("Real-Time Business Accounting Management System")
     
     st.markdown("---")
