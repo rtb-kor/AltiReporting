@@ -53,10 +53,9 @@ class VisualizationManager:
             values=values,
             hole=0.3,
             marker_colors=self.color_palette[:len(labels)],
-            texttemplate='%{label}<br>%{value:,}원<br>(%{percent})',
+            texttemplate='%{label}<br>(%{percent})',
             textposition="auto",
             hovertemplate='<b>%{label}</b><br>' +
-                         '금액: %{value:,}원<br>' +
                          '비율: %{percent}<br>' +
                          '<extra></extra>'
         )])
@@ -111,10 +110,9 @@ class VisualizationManager:
             values=values,
             hole=0.3,
             marker_colors=self.color_palette[:len(labels)],
-            texttemplate='%{label}<br>%{value:,}원<br>(%{percent})',
+            texttemplate='%{label}<br>(%{percent})',
             textposition="auto",
             hovertemplate='<b>%{label}</b><br>' +
-                         '금액: %{value:,}원<br>' +
                          '비율: %{percent}<br>' +
                          '<extra></extra>'
         )])
