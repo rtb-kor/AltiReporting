@@ -673,12 +673,30 @@ def show_semi_annual_report():
     net_profit = total_revenue - total_expense
     
     with col1:
-        st.markdown(f'<div class="metric-card"><h3 style="margin: 0;">{period_name} 총 매출<br><span style="color: red !important;">{total_revenue:,}원</span></h3></div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div style="background: white; border: 3px solid #6c757d; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+            <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
+                {period_name} 총 매출<br><span style="color: red;">{total_revenue:,}원</span>
+            </h3>
+        </div>
+        ''', unsafe_allow_html=True)
     with col2:
-        st.markdown(f'<div class="metric-card"><h3 style="margin: 0;">{period_name} 총 매입<br><span style="color: blue !important;">{total_expense:,}원</span></h3></div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div style="background: white; border: 3px solid #6c757d; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+            <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
+                {period_name} 총 매입<br><span style="color: blue;">{total_expense:,}원</span>
+            </h3>
+        </div>
+        ''', unsafe_allow_html=True)
     with col3:
         profit_color = "red" if net_profit >= 0 else "blue"
-        st.markdown(f'<div class="metric-card"><h3 style="margin: 0;">{period_name} 순이익<br><span style="color: {profit_color} !important;">{net_profit:,}원</span></h3></div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div style="background: white; border: 3px solid #6c757d; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+            <h3 style="margin: 0; text-align: center; font-size: 1.4rem; font-weight: 700;">
+                {period_name} 순이익<br><span style="color: {profit_color};">{net_profit:,}원</span>
+            </h3>
+        </div>
+        ''', unsafe_allow_html=True)
     
     # 상세 분석
     col1, col2 = st.columns(2)
