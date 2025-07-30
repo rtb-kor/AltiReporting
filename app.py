@@ -149,16 +149,16 @@ def show_dashboard():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("📈 월별 매출 추이")
-        if data:
-            monthly_chart = st.session_state.viz_manager.create_monthly_trend_chart(data)
-            st.plotly_chart(monthly_chart, use_container_width=True)
-    
-    with col2:
         st.subheader("🏭 매출처별 분포")
         if latest_month and data[latest_month].get('매출'):
             pie_chart = st.session_state.viz_manager.create_revenue_pie_chart(data[latest_month]['매출'])
             st.plotly_chart(pie_chart, use_container_width=True)
+    
+    with col2:
+        st.subheader("💸 매입 항목별 분포")
+        if latest_month and data[latest_month].get('매입'):
+            expense_pie = st.session_state.viz_manager.create_expense_pie_chart(data[latest_month]['매입'])
+            st.plotly_chart(expense_pie, use_container_width=True)
 
 def show_data_input():
     st.header("📝 데이터 입력")
