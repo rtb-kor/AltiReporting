@@ -454,45 +454,53 @@ def show_monthly_report():
     with col1:
         st.subheader("매출 현황")
         
-        # 전자세금계산서매출
-        st.markdown("**전자세금계산서매출**")
+        # 전자세금계산서매출 카드
         electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
-        electronic_data = []
-        electronic_total = 0
-        for source in electronic_tax_sources:
-            amount = data['매출'].get(source, 0)
-            electronic_data.append([source, f"{amount:,}"])
-            electronic_total += amount
+        electronic_total = sum(data['매출'].get(source, 0) for source in electronic_tax_sources)
         
-        electronic_df = pd.DataFrame(electronic_data)
-        electronic_df.columns = ['매출처', '금액(원)']
-        st.dataframe(electronic_df, hide_index=True, use_container_width=True)
-        st.markdown(f'<div class="highlight-number">소계: {electronic_total:,}원</div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #dc3545; margin-bottom: 1rem;">
+            <h4 style="margin: 0 0 0.8rem 0; color: #2c3e50; font-weight: 600;">전자세금계산서매출</h4>
+            <div style="text-align: right; font-size: 1.3rem; font-weight: 700;">
+                <span style="color: red !important;">소계: {electronic_total:,}원</span>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
         
-        # 영세매출
-        st.markdown("**영세매출**")
+        # 영세매출 카드
         zero_rated_sources = ["Everllence LEO", "Mitsui"]
-        zero_data = []
-        zero_total = 0
-        for source in zero_rated_sources:
-            amount = data['매출'].get(source, 0)
-            zero_data.append([source, f"{amount:,}"])
-            zero_total += amount
+        zero_total = sum(data['매출'].get(source, 0) for source in zero_rated_sources)
         
-        zero_df = pd.DataFrame(zero_data)
-        zero_df.columns = ['매출처', '금액(원)']
-        st.dataframe(zero_df, hide_index=True, use_container_width=True)
-        st.markdown(f'<div class="highlight-number">소계: {zero_total:,}원</div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #dc3545; margin-bottom: 1rem;">
+            <h4 style="margin: 0 0 0.8rem 0; color: #2c3e50; font-weight: 600;">영세매출</h4>
+            <div style="text-align: right; font-size: 1.3rem; font-weight: 700;">
+                <span style="color: red !important;">소계: {zero_total:,}원</span>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
         
-        # 기타 매출
-        st.markdown("**기타 매출**")
+        # 기타매출 카드
         other_amount = data['매출'].get("기타", 0)
-        other_df = pd.DataFrame([["기타", f"{other_amount:,}"]])
-        other_df.columns = ['매출처', '금액(원)']
-        st.dataframe(other_df, hide_index=True, use_container_width=True)
         
+        st.markdown(f'''
+        <div style="background: #f8f9fa; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #dc3545; margin-bottom: 1rem;">
+            <h4 style="margin: 0 0 0.8rem 0; color: #2c3e50; font-weight: 600;">기타매출</h4>
+            <div style="text-align: right; font-size: 1.3rem; font-weight: 700;">
+                <span style="color: red !important;">{other_amount:,}원</span>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
+        
+        # 매출 총계
         total_revenue = sum(data['매출'].values())
-        st.markdown(f'<div class="metric-card"><h3 style="margin: 0;">매출 총계: <span style="color: red !important;">{total_revenue:,}원</span></h3></div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div style="background: linear-gradient(135deg, #dc3545, #e85a6a); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+            <h3 style="margin: 0; color: white; text-align: center; font-size: 1.4rem; font-weight: 700;">
+                매출 총계: {total_revenue:,}원
+            </h3>
+        </div>
+        ''', unsafe_allow_html=True)
     
     with col2:
         st.subheader("매입 현황")
