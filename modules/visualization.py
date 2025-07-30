@@ -238,7 +238,7 @@ class VisualizationManager:
             return fig
         
         # 매출처별 월별 데이터 준비
-        revenue_sources = ["EverllenceLEO", "EverllencePrime", "SunJin&FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
+        revenue_sources = ["Everllence LEO", "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
         months = sorted(period_data.keys())
         month_labels = [f"{month.split('-')[1]}월" for month in months]
         

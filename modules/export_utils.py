@@ -248,7 +248,7 @@ class ExportManager:
             
             # 월별 매출 현황
             months = sorted(period_data.keys())
-            revenue_sources = ["EverllenceLEO", "EverllencePrime", "SunJin&FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
+            revenue_sources = ["Everllence LEO", "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
             
             revenue_comparison = {'월': []}
             for source in revenue_sources:

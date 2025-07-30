@@ -130,7 +130,7 @@ def show_data_input():
         st.subheader("💰 매출 입력")
         
         # 매출처별 입력
-        revenue_sources = ["EverllenceLEO", "EverllencePrime", "SunJin&FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
+        revenue_sources = ["Everllence LEO", "Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Mitsui", "Jodiac", "BCKR", "기타"]
         revenue_data = {}
         
         # 새로운 매출처 추가 기능

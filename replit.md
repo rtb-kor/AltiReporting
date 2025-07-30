@@ -7,7 +7,7 @@ RTB 회계 통합 보고서 시스템은 Streamlit 기반의 웹 애플리케이
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
-매출처 설정: EverllenceLEO, EverllencePrime, SunJin&FMD, USNS, RENK, Vine Plant, 종합해사, Mitsui, Jodiac, BCKR, 기타 (동적 추가 가능)
+매출처 설정: Everllence LEO, Everllence Prime, SUNJIN & FMD, USNS, RENK, Vine Plant, 종합해사, Mitsui, Jodiac, BCKR, 기타 (동적 추가 가능)
 
 ## System Architecture
 
