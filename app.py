@@ -762,9 +762,9 @@ def show_annual_report():
     
     # 보고서 헤더
     st.markdown(f"""
-    <div class="report-header">
-        <h2 style="color: white !important; margin: 0; font-size: 1.6rem; font-family: 'Inter', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">RTB {year}년 연말 보고서</h2>
-        <div style="margin-top: 1rem; font-size: 1rem; color: white !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">
+    <div style="background: linear-gradient(135deg, #B8344F, #D32F4A); color: white; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: white !important; margin: 0; font-size: 1.4rem; font-family: 'Inter', sans-serif; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">RTB {year}년 연말 보고서</h2>
+        <div style="margin-top: 0.8rem; font-size: 0.9rem; color: white !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
             <strong>작성일:</strong> {datetime.now().strftime('%Y년 %m월 %d일')} &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>보고기간:</strong> {year}년 전체 &nbsp;&nbsp;|&nbsp;&nbsp;
             <strong>작성자:</strong> RTB 회계팀
