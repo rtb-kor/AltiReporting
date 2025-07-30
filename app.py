@@ -79,6 +79,13 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
+    /* burgundy 배경 메트릭 카드에서 흰색 텍스트 우선 적용 */
+    div[style*="background: linear-gradient(135deg, #9C2A4A"] h2,
+    div[style*="background: linear-gradient(135deg, #9C2A4A"] h3,
+    div[style*="background: linear-gradient(135deg, #9C2A4A"] h4 {
+        color: white !important;
+    }
+    
     /* 버튼 스타일 */
     .stButton > button {
         background-color: var(--rtb-burgundy) !important;
