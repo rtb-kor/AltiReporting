@@ -855,7 +855,7 @@ def show_annual_report():
     
     # 구성 비교 차트 (매출구성 vs 매입분포)
     st.markdown("---")
-    st.markdown("<h3 style='text-align: center; color: #9C2A4A; font-family: Inter, sans-serif;'>매출구성 vs 매입분포 비교</h3>", unsafe_allow_html=True)
+    st.subheader("매출구성 vs 매입분포 비교")
     
     col1, col2 = st.columns(2)
     
