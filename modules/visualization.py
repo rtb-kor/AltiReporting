@@ -457,8 +457,8 @@ class VisualizationManager:
         labels = list(filtered_data.keys())
         values = list(filtered_data.values())
         
-        # 매출 유형별 색상
-        colors = ['#FF6B6B', '#4ECDC4', '#45B7D1']
+        # 매출 유형별 색상 - 매입분포와 조화로운 3색상
+        colors = ['#9C2A4A', '#B73B5A', '#D14866']  # RTB 버건디 계열 3단계
         
         fig = go.Figure(data=[go.Pie(
             labels=labels,
@@ -476,15 +476,17 @@ class VisualizationManager:
         
         fig.update_layout(
             title={
-                'text': '매출 구성',
+                'text': '매출 구성 분포',
                 'x': 0.5,
                 'xanchor': 'center',
-                'font': {'size': 16}
+                'font': {'size': 16, 'family': 'Inter, sans-serif', 'color': '#9C2A4A'}
             },
             showlegend=True,
-            height=350,
-            margin=dict(t=40, b=40, l=40, r=40),
-            font=dict(family="Arial", size=11)
+            height=400,
+            margin=dict(t=50, b=50, l=50, r=50),
+            font=dict(family="Inter, sans-serif", size=12, color='#374151'),
+            plot_bgcolor='white',
+            paper_bgcolor='white'
         )
         
         return fig
