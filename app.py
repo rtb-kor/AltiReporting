@@ -30,7 +30,7 @@ st.markdown("""
     
     /* 전체 앱 스타일 */
     .main .block-container {
-        padding-top: 2rem;
+        padding-top: 1rem;
         font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
     }
     
@@ -273,9 +273,9 @@ def main():
     
     with col2:
         st.title("RTB 회계 통합 보고서")
-        st.caption("Real-Time Business Accounting Management System")
+        st.caption("실시간 기업회계관리 시스템")
     
-    st.markdown("---")
+    st.markdown('<div style="margin: 0.5rem 0;"></div>', unsafe_allow_html=True)
     
     # 사이드바 메뉴 (관리자 권한에 따라 다르게 표시)
     with st.sidebar:
