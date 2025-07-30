@@ -740,10 +740,69 @@ def show_semi_annual_report():
     
     with col1:
         st.subheader("매출처별 집계")
-        revenue_df = pd.DataFrame(list(semi_annual_summary['매출'].items()))
-        revenue_df.columns = ['매출처', '금액(원)']
-        revenue_df['금액(원)'] = revenue_df['금액(원)'].apply(lambda x: f"{x:,}")
-        st.dataframe(revenue_df, hide_index=True, use_container_width=True)
+        
+        # 매출처를 카테고리별로 분류하여 표시
+        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
+        zero_rated_sources = ["Everllence LEO", "Mitsui"]
+        
+        # 전자세금계산서매출 집계
+        electronic_total = 0
+        electronic_items = []
+        for source in electronic_tax_sources:
+            amount = semi_annual_summary['매출'].get(source, 0)
+            if amount > 0:
+                electronic_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.2rem 0; border-bottom: 1px solid #e9ecef;"><span style="font-size: 0.9rem;">{source}</span><span style="font-weight: 600; font-size: 0.9rem;">{amount:,}원</span></div>')
+                electronic_total += amount
+        
+        if electronic_total > 0:
+            st.markdown(f'''
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid #6c757d;">
+                <h5 style="margin: 0 0 0.5rem 0; color: #2c3e50; font-weight: 600;">전자세금계산서매출</h5>
+                <div style="background: white; padding: 0.8rem; border-radius: 4px; margin-bottom: 0.5rem;">
+                    {''.join(electronic_items)}
+                </div>
+                <div style="text-align: right; font-size: 1.1rem; font-weight: 700; color: red;">
+                    소계: {electronic_total:,}원
+                </div>
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        # 영세매출 집계
+        zero_total = 0
+        zero_items = []
+        for source in zero_rated_sources:
+            amount = semi_annual_summary['매출'].get(source, 0)
+            if amount > 0:
+                zero_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.2rem 0; border-bottom: 1px solid #e9ecef;"><span style="font-size: 0.9rem;">{source}</span><span style="font-weight: 600; font-size: 0.9rem;">{amount:,}원</span></div>')
+                zero_total += amount
+        
+        if zero_total > 0:
+            st.markdown(f'''
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid #6c757d;">
+                <h5 style="margin: 0 0 0.5rem 0; color: #2c3e50; font-weight: 600;">영세매출</h5>
+                <div style="background: white; padding: 0.8rem; border-radius: 4px; margin-bottom: 0.5rem;">
+                    {''.join(zero_items)}
+                </div>
+                <div style="text-align: right; font-size: 1.1rem; font-weight: 700; color: red;">
+                    소계: {zero_total:,}원
+                </div>
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        # 기타매출 집계
+        other_amount = semi_annual_summary['매출'].get("기타", 0)
+        if other_amount > 0:
+            st.markdown(f'''
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border-left: 3px solid #6c757d;">
+                <h5 style="margin: 0 0 0.5rem 0; color: #2c3e50; font-weight: 600;">기타매출</h5>
+                <div style="background: white; padding: 0.8rem; border-radius: 4px; margin-bottom: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 0.2rem 0;"><span style="font-size: 0.9rem;">기타</span><span style="font-weight: 600; font-size: 0.9rem;">{other_amount:,}원</span></div>
+                </div>
+                <div style="text-align: right; font-size: 1.1rem; font-weight: 700; color: red;">
+                    소계: {other_amount:,}원
+                </div>
+            </div>
+            ''', unsafe_allow_html=True)
     
     with col2:
         st.subheader("매입 항목별 집계")
@@ -856,29 +915,68 @@ def show_annual_report():
     with col1:
         st.markdown("#### 매출 세부 내역")
         
-        # 전자세금계산서매출 소계
-        electronic_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
-        electronic_total = sum(annual_summary['매출'].get(source, 0) for source in electronic_sources)
+        # 매출처를 카테고리별로 분류하여 표시
+        electronic_tax_sources = ["Everllence Prime", "SUNJIN & FMD", "USNS", "RENK", "Vine Plant", "종합해사", "Jodiac", "BCKR"]
+        zero_rated_sources = ["Everllence LEO", "Mitsui"]
         
-        # 영세매출 소계
-        zero_sources = ["Everllence LEO", "Mitsui"]
-        zero_total = sum(annual_summary['매출'].get(source, 0) for source in zero_sources)
+        # 전자세금계산서매출 집계
+        electronic_total = 0
+        electronic_items = []
+        for source in electronic_tax_sources:
+            amount = annual_summary['매출'].get(source, 0)
+            if amount > 0:
+                electronic_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.15rem 0; border-bottom: 1px solid #e9ecef;"><span style="font-size: 0.85rem;">{source}</span><span style="font-weight: 600; font-size: 0.85rem;">{amount:,}원</span></div>')
+                electronic_total += amount
         
-        # 기타매출
-        other_total = annual_summary['매출'].get("기타", 0)
+        if electronic_total > 0:
+            st.markdown(f'''
+            <div style="background: #f8f9fa; padding: 0.8rem; border-radius: 6px; margin-bottom: 0.8rem; border-left: 3px solid #6c757d;">
+                <h6 style="margin: 0 0 0.4rem 0; color: #2c3e50; font-weight: 600;">전자세금계산서매출</h6>
+                <div style="background: white; padding: 0.6rem; border-radius: 4px; margin-bottom: 0.4rem;">
+                    {''.join(electronic_items)}
+                </div>
+                <div style="text-align: right; font-size: 1rem; font-weight: 700; color: red;">
+                    소계: {electronic_total:,}원
+                </div>
+            </div>
+            ''', unsafe_allow_html=True)
         
-        revenue_summary = {
-            "전자세금계산서매출": electronic_total,
-            "영세매출": zero_total,
-            "기타매출": other_total
-        }
+        # 영세매출 집계
+        zero_total = 0
+        zero_items = []
+        for source in zero_rated_sources:
+            amount = annual_summary['매출'].get(source, 0)
+            if amount > 0:
+                zero_items.append(f'<div style="display: flex; justify-content: space-between; padding: 0.15rem 0; border-bottom: 1px solid #e9ecef;"><span style="font-size: 0.85rem;">{source}</span><span style="font-weight: 600; font-size: 0.85rem;">{amount:,}원</span></div>')
+                zero_total += amount
         
-        # 매출 구성 표
-        revenue_df = pd.DataFrame(list(revenue_summary.items()))
-        revenue_df.columns = ['구분', '금액']
-        revenue_df['금액'] = revenue_df['금액'].apply(lambda x: f"{x:,}원")
-        revenue_df['비율'] = [f"{(v/total_revenue*100):.1f}%" for v in revenue_summary.values()]
-        st.dataframe(revenue_df, hide_index=True, use_container_width=True)
+        if zero_total > 0:
+            st.markdown(f'''
+            <div style="background: #f8f9fa; padding: 0.8rem; border-radius: 6px; margin-bottom: 0.8rem; border-left: 3px solid #6c757d;">
+                <h6 style="margin: 0 0 0.4rem 0; color: #2c3e50; font-weight: 600;">영세매출</h6>
+                <div style="background: white; padding: 0.6rem; border-radius: 4px; margin-bottom: 0.4rem;">
+                    {''.join(zero_items)}
+                </div>
+                <div style="text-align: right; font-size: 1rem; font-weight: 700; color: red;">
+                    소계: {zero_total:,}원
+                </div>
+            </div>
+            ''', unsafe_allow_html=True)
+        
+        # 기타매출 집계
+        other_amount = annual_summary['매출'].get("기타", 0)
+        if other_amount > 0:
+            st.markdown(f'''
+            <div style="background: #f8f9fa; padding: 0.8rem; border-radius: 6px; margin-bottom: 0.8rem; border-left: 3px solid #6c757d;">
+                <h6 style="margin: 0 0 0.4rem 0; color: #2c3e50; font-weight: 600;">기타매출</h6>
+                <div style="background: white; padding: 0.6rem; border-radius: 4px; margin-bottom: 0.4rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 0.15rem 0;"><span style="font-size: 0.85rem;">기타</span><span style="font-weight: 600; font-size: 0.85rem;">{other_amount:,}원</span></div>
+                </div>
+                <div style="text-align: right; font-size: 1rem; font-weight: 700; color: red;">
+                    소계: {other_amount:,}원
+                </div>
+            </div>
+            ''', unsafe_allow_html=True)
     
     with col2:
         st.markdown("#### 매입 세부 내역")
@@ -893,6 +991,13 @@ def show_annual_report():
     # 구성 비교 차트 (매출구성 vs 매입분포)
     st.markdown("---")
     st.subheader("매출구성 vs 매입분포 비교")
+    
+    # revenue_summary 재생성
+    revenue_summary = {
+        "전자세금계산서매출": electronic_total,
+        "영세매출": zero_total,
+        "기타매출": other_amount
+    }
     
     col1, col2 = st.columns(2)
     
