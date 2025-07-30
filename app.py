@@ -762,12 +762,12 @@ def show_annual_report():
     
     # 보고서 헤더
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #B8344F, #D32F4A); color: white; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);">
+    <div style="background: linear-gradient(135deg, #B8344F, #D32F4A); color: white !important; padding: 1.2rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);">
         <h2 style="color: white !important; margin: 0; font-size: 1.4rem; font-family: 'Inter', sans-serif; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">RTB {year}년 연말 보고서</h2>
         <div style="margin-top: 0.8rem; font-size: 0.9rem; color: white !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
-            <strong>보고일:</strong> 2026년 01월 15일 &nbsp;&nbsp;|&nbsp;&nbsp;
-            <strong>보고기간:</strong> {year}년 전체 &nbsp;&nbsp;|&nbsp;&nbsp;
-            <strong>작성자:</strong> RTB 회계팀
+            <strong style="color: white !important;">보고일:</strong> <span style="color: white !important;">2026년 01월 15일</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong style="color: white !important;">보고기간:</strong> <span style="color: white !important;">{year}년 전체</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <strong style="color: white !important;">작성자:</strong> <span style="color: white !important;">RTB 회계팀</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
