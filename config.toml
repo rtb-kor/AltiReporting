@@ -1,0 +1,28 @@
+[server]
+# 서버 안정성 설정
+enableCORS = false
+enableXsrfProtection = false
+maxUploadSize = 200
+headless = true
+port = 8501
+
+[browser]
+# 브라우저 호환성 설정
+gatherUsageStats = false
+serverAddress = "localhost"
+
+[client]
+# 클라이언트 안정성 설정
+showErrorDetails = false
+toolbarMode = "minimal"
+caching = false
+
+[theme]
+# 테마 설정
+base = "light"
+
+[runner]
+# 러너 안정성 설정
+magicEnabled = false
+installTracer = false
+fixMatplotlib = true

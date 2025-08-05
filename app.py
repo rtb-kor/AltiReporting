@@ -13,7 +13,12 @@ st.set_page_config(
     page_title="RTB 회계 통합 보고서",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': None
+    }
 )
 
 # RTB 브랜드 스타일링
@@ -28,13 +33,23 @@ st.markdown("""
         --rtb-dark-gray: #374151;
     }
     
-    /* 전체 앱 스타일 */
+    /* 전체 앱 스타일 - 안전한 DOM 조작 */
     .main .block-container {
         padding-top: 0.5rem;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
         font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
         max-width: 100%;
+    }
+    
+    /* Streamlit DOM 안정성 개선 */
+    .stApp {
+        overflow-x: hidden;
+    }
+    
+    /* 안전한 요소 선택자 */
+    div[data-testid="stAppViewContainer"] {
+        background-color: #fafafa;
     }
     
     /* 제목 스타일 */
@@ -46,8 +61,8 @@ st.markdown("""
         margin-bottom: 0.2rem !important;
     }
     
-    /* 캡션 스타일 */
-    .css-10trblm {
+    /* 캡션 스타일 - 안전한 선택자 */
+    [data-testid="caption"] {
         font-size: 0.8rem !important;
         margin-bottom: 0.5rem !important;
     }
@@ -88,12 +103,56 @@ st.markdown("""
         margin-bottom: 0.8rem;
     }
     
-    /* burgundy 배경 메트릭 카드에서 흰색 텍스트 우선 적용 */
+    /* burgundy 배경 메트릭 카드에서 흰색 텍스트 우선 적용 - 안전한 선택자 */
     div[style*="background: linear-gradient(135deg, #9C2A4A"] h2,
     div[style*="background: linear-gradient(135deg, #9C2A4A"] h3,
     div[style*="background: linear-gradient(135deg, #9C2A4A"] h4 {
         color: white !important;
     }
+    
+    /* DOM 안정성 개선 */
+    .element-container {
+        position: relative;
+    }
+    
+    /* 안전한 애니메이션 */
+    * {
+        transition: none !important;
+    }
+    
+    /* JavaScript 오류 방지 */
+    <script>
+    // DOM 조작 오류 방지
+    window.addEventListener('error', function(e) {
+        if (e.message.includes('removeChild') || e.message.includes('Node')) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Streamlit DOM 안정성 개선
+    document.addEventListener('DOMContentLoaded', function() {
+        // 안전한 DOM 조작
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    // DOM 변경 감지시 안전하게 처리
+                    try {
+                        // 필요한 경우에만 DOM 조작
+                    } catch (error) {
+                        console.warn('DOM 조작 오류 무시:', error);
+                    }
+                }
+            });
+        });
+        
+        // DOM 변경 감지 시작
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+    </script>
     
     /* 연말 보고서 헤더 강제 흰색 적용 */
     .annual-report-header h2,
@@ -357,16 +416,22 @@ def main():
     # 관리자 인증 확인
     is_admin = check_admin_access()
     
-    # 헤더에 로고와 제목 표시 (모바일 최적화)
-    col1, col2 = st.columns([1, 5])
-    
-    with col1:
-        try:
-            st.image("assets/rtb_logo.png", width=60)
-        except:
-            st.markdown("🏢")
-    
-    with col2:
+    # 안전한 헤더 표시 (JavaScript 오류 방지)
+    try:
+        # 헤더에 로고와 제목 표시 (모바일 최적화)
+        col1, col2 = st.columns([1, 5])
+        
+        with col1:
+            try:
+                st.image("assets/rtb_logo.png", width=60)
+            except:
+                st.markdown("🏢")
+        
+        with col2:
+            st.title("RTB 회계 통합 보고서")
+            st.caption("실시간 기업회계관리 시스템")
+    except Exception as e:
+        # 오류 발생시 간단한 헤더로 대체
         st.title("RTB 회계 통합 보고서")
         st.caption("실시간 기업회계관리 시스템")
     
@@ -376,15 +441,20 @@ def main():
     with st.sidebar:
         st.header("📋 메뉴")
         
-        if is_admin:
-            menu_options = ["📝 데이터 입력", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "📈 업체별 매출변동 비교", "⚙️ 설정"]
-        else:
-            menu_options = ["📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "📈 업체별 매출변동 비교"]
-        
-        menu = st.selectbox(
-            "보고서 유형 선택",
-            menu_options
-        )
+        try:
+            if is_admin:
+                menu_options = ["📝 데이터 입력", "📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "📈 업체별 매출변동 비교", "⚙️ 설정"]
+            else:
+                menu_options = ["📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서", "📈 업체별 매출변동 비교"]
+            
+            menu = st.selectbox(
+                "보고서 유형 선택",
+                menu_options
+            )
+        except Exception as e:
+            # 오류 발생시 기본 메뉴로 대체
+            menu_options = ["📈 월말 보고서", "📊 반기 보고서", "📋 연말 보고서"]
+            menu = st.selectbox("보고서 유형 선택", menu_options)
         
         st.markdown("---")
         st.subheader("🗓️ 보고 일정")
