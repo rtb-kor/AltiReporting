@@ -1,0 +1,8 @@
+[build]
+  publish = "streamlit-static"
+  command = "streamlit run app.py --server.headless true --server.port 8501 --server.address 0.0.0.0"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 
