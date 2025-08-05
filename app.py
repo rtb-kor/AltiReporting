@@ -6,32 +6,63 @@ import os
 import sys
 import traceback
 
-# 오류 방지 설정
+# 기본 라이브러리 import
 try:
+    import numpy as np
+except ImportError:
+    st.error("numpy 라이브러리가 필요합니다.")
+    st.stop()
+
+# 모듈 import - 단계별로 시도
+modules_loaded = False
+try:
+    # 1단계: data_manager
     from modules.data_manager import DataManager
+    st.success("✅ DataManager 로드 완료")
+    
+    # 2단계: report_generator
     from modules.report_generator import ReportGenerator
+    st.success("✅ ReportGenerator 로드 완료")
+    
+    # 3단계: visualization
     from modules.visualization import VisualizationManager
+    st.success("✅ VisualizationManager 로드 완료")
+    
+    # 4단계: export_utils
     from modules.export_utils import ExportManager
+    st.success("✅ ExportManager 로드 완료")
+    
+    modules_loaded = True
+    st.success("🎉 모든 모듈이 성공적으로 로드되었습니다!")
+    
 except ImportError as e:
-    st.error(f"모듈 로드 오류: {e}")
+    st.error(f"❌ 모듈 로드 오류: {e}")
     st.info("필요한 모듈을 설치하고 있습니다...")
     st.stop()
 except Exception as e:
-    st.error(f"예상치 못한 오류: {e}")
+    st.error(f"❌ 예상치 못한 오류: {e}")
     st.stop()
 
-# 페이지 설정
-st.set_page_config(
-    page_title="RTB 회계 통합 보고서",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded",
-    menu_items={
-        'Get Help': None,
-        'Report a bug': None,
-        'About': None
-    }
-)
+# 페이지 설정 - 안전한 버전
+try:
+    st.set_page_config(
+        page_title="RTB 회계 통합 보고서",
+        page_icon="📊",
+        layout="wide",
+        initial_sidebar_state="expanded",
+        menu_items={
+            'Get Help': None,
+            'Report a bug': None,
+            'About': None
+        }
+    )
+except Exception as e:
+    # 기본 설정으로 대체
+    st.set_page_config(
+        page_title="RTB 회계 통합 보고서",
+        page_icon="📊",
+        layout="wide"
+    )
 
 # RTB 브랜드 스타일링 - JavaScript 오류 방지 버전
 st.markdown("""
@@ -451,11 +482,14 @@ def check_admin_access():
     return st.session_state.is_admin
 
 def main():
+    st.info("🚀 RTB 회계 통합 보고서 시스템을 시작합니다...")
+    
     try:
         # 관리자 인증 확인
         is_admin = check_admin_access()
+        st.success("✅ 인증 시스템 로드 완료")
     except Exception as e:
-        st.error(f"인증 오류: {e}")
+        st.error(f"❌ 인증 오류: {e}")
         st.info("기본 모드로 실행합니다.")
         is_admin = False
     
@@ -1597,9 +1631,19 @@ def show_revenue_trend_comparison():
             st.dataframe(growth_df, use_container_width=True, hide_index=True)
 
 if __name__ == "__main__":
+    st.title("🔄 RTB 회계 통합 보고서 시스템 초기화 중...")
+    
     try:
-        main()
+        if modules_loaded:
+            st.success("✅ 모든 준비가 완료되었습니다!")
+            main()
+        else:
+            st.error("❌ 필요한 모듈이 로드되지 않았습니다.")
+            st.info("페이지를 새로고침하거나 잠시 후 다시 시도해주세요.")
+            st.button("🔄 새로고침", on_click=lambda: st.rerun())
     except Exception as e:
-        st.error(f"앱 실행 오류: {str(e)}")
+        st.error(f"❌ 앱 실행 오류: {str(e)}")
+        st.info("오류가 지속되면 관리자에게 문의하세요.")
         st.code(traceback.format_exc())
+        st.button("🔄 다시 시도", on_click=lambda: st.rerun())
         st.stop()

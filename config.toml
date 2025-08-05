@@ -21,18 +21,6 @@ toolbarMode = "minimal"
 caching = false
 displayEnabled = true
 
-[browser]
-# 브라우저 호환성 설정
-gatherUsageStats = false
-serverAddress = "localhost"
-
-[client]
-# 클라이언트 안정성 설정
-showErrorDetails = false
-toolbarMode = "minimal"
-caching = false
-displayEnabled = true
-
 [theme]
 # 테마 설정
 base = "light"
