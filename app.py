@@ -14,6 +14,10 @@ try:
     from modules.export_utils import ExportManager
 except ImportError as e:
     st.error(f"모듈 로드 오류: {e}")
+    st.info("필요한 모듈을 설치하고 있습니다...")
+    st.stop()
+except Exception as e:
+    st.error(f"예상치 못한 오류: {e}")
     st.stop()
 
 # 페이지 설정
@@ -447,8 +451,13 @@ def check_admin_access():
     return st.session_state.is_admin
 
 def main():
-    # 관리자 인증 확인
-    is_admin = check_admin_access()
+    try:
+        # 관리자 인증 확인
+        is_admin = check_admin_access()
+    except Exception as e:
+        st.error(f"인증 오류: {e}")
+        st.info("기본 모드로 실행합니다.")
+        is_admin = False
     
     # 안전한 헤더 표시 (JavaScript 오류 방지)
     try:

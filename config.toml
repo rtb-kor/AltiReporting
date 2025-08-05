@@ -7,6 +7,19 @@ headless = true
 port = 8501
 enableStaticServing = true
 fileWatcherType = "none"
+maxMessageSize = 200
+
+[browser]
+# 브라우저 호환성 설정
+gatherUsageStats = false
+serverAddress = "localhost"
+
+[client]
+# 클라이언트 안정성 설정
+showErrorDetails = true
+toolbarMode = "minimal"
+caching = false
+displayEnabled = true
 
 [browser]
 # 브라우저 호환성 설정
