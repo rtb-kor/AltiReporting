@@ -13,7 +13,12 @@ st.set_page_config(
     page_title="RTB 회계 통합 보고서",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': None
+    }
 )
 
 # RTB 브랜드 스타일링
@@ -28,13 +33,23 @@ st.markdown("""
         --rtb-dark-gray: #374151;
     }
     
-    /* 전체 앱 스타일 */
+    /* 전체 앱 스타일 - 안전한 DOM 조작 */
     .main .block-container {
         padding-top: 0.5rem;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
         font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
         max-width: 100%;
+    }
+    
+    /* Streamlit DOM 안정성 개선 */
+    .stApp {
+        overflow-x: hidden;
+    }
+    
+    /* 안전한 요소 선택자 */
+    div[data-testid="stAppViewContainer"] {
+        background-color: #fafafa;
     }
     
     /* 제목 스타일 */
@@ -46,8 +61,8 @@ st.markdown("""
         margin-bottom: 0.2rem !important;
     }
     
-    /* 캡션 스타일 */
-    .css-10trblm {
+    /* 캡션 스타일 - 안전한 선택자 */
+    [data-testid="caption"] {
         font-size: 0.8rem !important;
         margin-bottom: 0.5rem !important;
     }
@@ -88,11 +103,21 @@ st.markdown("""
         margin-bottom: 0.8rem;
     }
     
-    /* burgundy 배경 메트릭 카드에서 흰색 텍스트 우선 적용 */
+    /* burgundy 배경 메트릭 카드에서 흰색 텍스트 우선 적용 - 안전한 선택자 */
     div[style*="background: linear-gradient(135deg, #9C2A4A"] h2,
     div[style*="background: linear-gradient(135deg, #9C2A4A"] h3,
     div[style*="background: linear-gradient(135deg, #9C2A4A"] h4 {
         color: white !important;
+    }
+    
+    /* DOM 안정성 개선 */
+    .element-container {
+        position: relative;
+    }
+    
+    /* 안전한 애니메이션 */
+    * {
+        transition: none !important;
     }
     
     /* 연말 보고서 헤더 강제 흰색 적용 */
