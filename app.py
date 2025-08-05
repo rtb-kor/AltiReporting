@@ -3,10 +3,18 @@ import pandas as pd
 import json
 from datetime import datetime, date
 import os
-from modules.data_manager import DataManager
-from modules.report_generator import ReportGenerator
-from modules.visualization import VisualizationManager
-from modules.export_utils import ExportManager
+import sys
+import traceback
+
+# 오류 방지 설정
+try:
+    from modules.data_manager import DataManager
+    from modules.report_generator import ReportGenerator
+    from modules.visualization import VisualizationManager
+    from modules.export_utils import ExportManager
+except ImportError as e:
+    st.error(f"모듈 로드 오류: {e}")
+    st.stop()
 
 # 페이지 설정
 st.set_page_config(
@@ -21,7 +29,7 @@ st.set_page_config(
     }
 )
 
-# RTB 브랜드 스타일링
+# RTB 브랜드 스타일링 - JavaScript 오류 방지 버전
 st.markdown("""
 <style>
     /* RTB 브랜드 색상 */
@@ -33,7 +41,7 @@ st.markdown("""
         --rtb-dark-gray: #374151;
     }
     
-    /* 전체 앱 스타일 - 안전한 DOM 조작 */
+    /* 전체 앱 스타일 - 최소한의 DOM 조작 */
     .main .block-container {
         padding-top: 0.5rem;
         padding-left: 0.5rem;
@@ -45,11 +53,24 @@ st.markdown("""
     /* Streamlit DOM 안정성 개선 */
     .stApp {
         overflow-x: hidden;
+        position: relative;
     }
     
     /* 안전한 요소 선택자 */
     div[data-testid="stAppViewContainer"] {
         background-color: #fafafa;
+    }
+    
+    /* JavaScript 오류 방지를 위한 안전한 스타일 */
+    .element-container {
+        position: relative;
+        overflow: visible;
+    }
+    
+    /* 모든 전환 효과 비활성화 */
+    * {
+        transition: none !important;
+        animation: none !important;
     }
     
     /* 제목 스타일 */
@@ -120,37 +141,50 @@ st.markdown("""
         transition: none !important;
     }
     
-    /* JavaScript 오류 방지 */
+    /* JavaScript 오류 방지 - 완전히 새로운 접근 */
     <script>
-    // DOM 조작 오류 방지
+    // 전역 오류 핸들러 - 모든 JavaScript 오류 무시
     window.addEventListener('error', function(e) {
-        if (e.message.includes('removeChild') || e.message.includes('Node')) {
-            e.preventDefault();
-            return false;
-        }
+        console.warn('JavaScript 오류 무시:', e.message);
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
     });
     
-    // Streamlit DOM 안정성 개선
-    document.addEventListener('DOMContentLoaded', function() {
-        // 안전한 DOM 조작
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'childList') {
-                    // DOM 변경 감지시 안전하게 처리
-                    try {
-                        // 필요한 경우에만 DOM 조작
-                    } catch (error) {
-                        console.warn('DOM 조작 오류 무시:', error);
-                    }
-                }
-            });
-        });
-        
-        // DOM 변경 감지 시작
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
+    // Promise 오류 핸들러
+    window.addEventListener('unhandledrejection', function(e) {
+        console.warn('Promise 오류 무시:', e.reason);
+        e.preventDefault();
+        return false;
+    });
+    
+    // DOM 조작 오류 방지
+    const originalRemoveChild = Node.prototype.removeChild;
+    Node.prototype.removeChild = function(child) {
+        try {
+            return originalRemoveChild.call(this, child);
+        } catch (error) {
+            console.warn('removeChild 오류 무시:', error);
+            return child;
+        }
+    };
+    
+    // Streamlit 특정 오류 방지
+    if (typeof window.streamlit !== 'undefined') {
+        // Streamlit 컴포넌트 오류 방지
+        const originalSetComponentValue = window.streamlit.setComponentValue;
+        window.streamlit.setComponentValue = function(value) {
+            try {
+                return originalSetComponentValue.call(this, value);
+            } catch (error) {
+                console.warn('Streamlit 컴포넌트 오류 무시:', error);
+            }
+        };
+    }
+    
+    // 페이지 로드 완료 후 안정화
+    window.addEventListener('load', function() {
+        console.log('페이지 로드 완료 - JavaScript 오류 방지 활성화');
     });
     </script>
     
@@ -1554,4 +1588,9 @@ def show_revenue_trend_comparison():
             st.dataframe(growth_df, use_container_width=True, hide_index=True)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        st.error(f"앱 실행 오류: {str(e)}")
+        st.code(traceback.format_exc())
+        st.stop()

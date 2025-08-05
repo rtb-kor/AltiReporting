@@ -5,6 +5,8 @@ enableXsrfProtection = false
 maxUploadSize = 200
 headless = true
 port = 8501
+enableStaticServing = true
+fileWatcherType = "none"
 
 [browser]
 # 브라우저 호환성 설정
@@ -16,6 +18,7 @@ serverAddress = "localhost"
 showErrorDetails = false
 toolbarMode = "minimal"
 caching = false
+displayEnabled = true
 
 [theme]
 # 테마 설정
@@ -26,3 +29,12 @@ base = "light"
 magicEnabled = false
 installTracer = false
 fixMatplotlib = true
+
+[logger]
+# 로거 설정
+level = "error"
+messageFormat = "%(asctime)s %(message)s"
+
+[global]
+# 전역 설정
+developmentMode = false
